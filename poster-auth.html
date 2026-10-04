@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Job Poster account login and registration."
+    >
+
+    <title>RemoteJobify — Job Poster</title>
+
+    <link rel="stylesheet" href="poster-auth.css">
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="background-glow background-glow-one"></div>
+    <div class="background-glow background-glow-two"></div>
+
+
+    <!-- Main -->
+    <main class="auth-page">
+
+        <section class="auth-container">
+
+            <!-- LEFT SIDE -->
+            <div class="auth-intro">
+
+                <div class="brand">
+                    REMOTEJOBIFY
+                </div>
+
+                <span class="intro-label">
+                    FOR EMPLOYERS
+                </span>
+
+                <h1>
+                    Find the right people
+                    for your next opportunity.
+                </h1>
+
+                <p>
+                    Create your employer account, post vacancies
+                    and connect with people looking for their
+                    next opportunity.
+                </p>
+
+                <div class="intro-line"></div>
+
+            </div>
+
+
+            <!-- RIGHT SIDE -->
+            <div class="auth-box">
+
+                <!-- LOGIN -->
+                <div
+                    class="auth-view active"
+                    id="loginView"
+                >
+
+                    <div class="auth-heading">
+
+                        <span class="small-label">
+                            JOB POSTER
+                        </span>
+
+                        <h2>
+                            Welcome back
+                        </h2>
+
+                        <p>
+                            Sign in to manage your job postings.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        id="loginForm"
+                        novalidate
+                    >
+
+                        <!-- Email -->
+                        <div class="field">
+
+                            <label for="loginEmail">
+                                Email address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="loginEmail"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                            >
+
+                            <span
+                                class="field-error"
+                                id="loginEmailError"
+                            ></span>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="field">
+
+                            <div class="label-row">
+
+                                <label for="loginPassword">
+                                    Password
+                                </label>
+
+                                <button
+                                    type="button"
+                                    class="text-button"
+                                    id="forgotPasswordButton"
+                                >
+                                    Forgot password?
+                                </button>
+
+                            </div>
+
+                            <div class="password-wrapper">
+
+                                <input
+                                    type="password"
+                                    id="loginPassword"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    autocomplete="current-password"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    data-target="loginPassword"
+                                    aria-label="Show password"
+                                >
+                                    Show
+                                </button>
+
+                            </div>
+
+                            <span
+                                class="field-error"
+                                id="loginPasswordError"
+                            ></span>
+
+                        </div>
+
+
+                        <!-- General error -->
+                        <div
+                            class="form-message error-message"
+                            id="loginMessage"
+                        ></div>
+
+
+                        <button
+                            type="submit"
+                            class="primary-button"
+                        >
+                            <span>Login</span>
+                        </button>
+
+                    </form>
+
+
+                    <div class="auth-switch">
+
+                        <span>
+                            Don't have an account?
+                        </span>
+
+                        <button
+                            type="button"
+                            class="text-button strong"
+                            id="showSignup"
+                        >
+                            Create account
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- SIGNUP -->
+                <div
+                    class="auth-view"
+                    id="signupView"
+                >
+
+                    <div class="auth-heading">
+
+                        <span class="small-label">
+                            JOB POSTER
+                        </span>
+
+                        <h2>
+                            Create account
+                        </h2>
+
+                        <p>
+                            Create your employer account to post jobs.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        id="signupForm"
+                        novalidate
+                    >
+
+                        <!-- Name -->
+                        <div class="field">
+
+                            <label for="signupName">
+                                Full name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="signupName"
+                                name="name"
+                                placeholder="Your full name"
+                                autocomplete="name"
+                            >
+
+                            <span
+                                class="field-error"
+                                id="signupNameError"
+                            ></span>
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div class="field">
+
+                            <label for="signupEmail">
+                                Email address
+                            </label>
+
+                            <input
+                                type="email"
+                                id="signupEmail"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                            >
+
+                            <span
+                                class="field-error"
+                                id="signupEmailError"
+                            ></span>
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="field">
+
+                            <label for="signupPassword">
+                                Password
+                            </label>
+
+                            <div class="password-wrapper">
+
+                                <input
+                                    type="password"
+                                    id="signupPassword"
+                                    name="password"
+                                    placeholder="Create a password"
+                                    autocomplete="new-password"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    data-target="signupPassword"
+                                >
+                                    Show
+                                </button>
+
+                            </div>
+
+                            <span
+                                class="field-error"
+                                id="signupPasswordError"
+                            ></span>
+
+                            <div
+                                class="password-strength"
+                                id="passwordStrength"
+                            >
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+
+                            <small
+                                class="password-hint"
+                            >
+                                Use at least 8 characters with letters and numbers.
+                            </small>
+
+                        </div>
+
+
+                        <!-- Confirm -->
+                        <div class="field">
+
+                            <label for="signupConfirmPassword">
+                                Confirm password
+                            </label>
+
+                            <div class="password-wrapper">
+
+                                <input
+                                    type="password"
+                                    id="signupConfirmPassword"
+                                    name="confirmPassword"
+                                    placeholder="Confirm your password"
+                                    autocomplete="new-password"
+                                >
+
+                                <button
+                                    type="button"
+                                    class="password-toggle"
+                                    data-target="signupConfirmPassword"
+                                >
+                                    Show
+                                </button>
+
+                            </div>
+
+                            <span
+                                class="field-error"
+                                id="signupConfirmPasswordError"
+                            ></span>
+
+                        </div>
+
+
+                        <!-- Terms -->
+                        <div class="terms-field">
+
+                            <label class="checkbox-label">
+
+                                <input
+                                    type="checkbox"
+                                    id="termsCheckbox"
+                                >
+
+                                <span class="custom-checkbox"></span>
+
+                                <span>
+                                    I agree to the
+                                    <button
+                                        type="button"
+                                        class="inline-button"
+                                        id="termsButton"
+                                    >
+                                        Terms & Conditions
+                                    </button>
+                                </span>
+
+                            </label>
+
+                            <span
+                                class="field-error"
+                                id="termsError"
+                            ></span>
+
+                        </div>
+
+
+                        <div
+                            class="form-message error-message"
+                            id="signupMessage"
+                        ></div>
+
+
+                        <button
+                            type="submit"
+                            class="primary-button"
+                        >
+                            <span>Create Account</span>
+                        </button>
+
+                    </form>
+
+
+                    <div class="auth-switch">
+
+                        <span>
+                            Already have an account?
+                        </span>
+
+                        <button
+                            type="button"
+                            class="text-button strong"
+                            id="showLogin"
+                        >
+                            Login
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- VERIFICATION -->
+                <div
+                    class="auth-view"
+                    id="verificationView"
+                >
+
+                    <div class="verification-icon">
+                        ✓
+                    </div>
+
+                    <div class="auth-heading centered">
+
+                        <span class="small-label">
+                            EMAIL VERIFICATION
+                        </span>
+
+                        <h2>
+                            Verify your email
+                        </h2>
+
+                        <p>
+                            We've sent a verification code to
+                        </p>
+
+                        <strong
+                            id="verificationEmail"
+                            class="verification-email"
+                        >
+                            your@email.com
+                        </strong>
+
+                    </div>
+
+
+                    <form
+                        id="verificationForm"
+                        novalidate
+                    >
+
+                        <div class="otp-container">
+
+                            <input
+                                type="text"
+                                maxlength="1"
+                                class="otp-input"
+                                inputmode="numeric"
+                                autocomplete="one-time-code"
+                            >
+
+                            <input
+                                type="text"
+                                maxlength="1"
+                                class="otp-input"
+                                inputmode="numeric"
+                            >
+
+                            <input
+                                type="text"
+                                maxlength="1"
+                                class="otp-input"
+                                inputmode="numeric"
+                            >
+
+                            <input
+                                type="text"
+                                maxlength="1"
+                                class="otp-input"
+                                inputmode="numeric"
+                            >
+
+                            <input
+                                type="text"
+                                maxlength="1"
+                                class="otp-input"
+                                inputmode="numeric"
+                            >
+
+                            <input
+                                type="text"
+                                maxlength="1"
+                                class="otp-input"
+                                inputmode="numeric"
+                            >
+
+                        </div>
+
+
+                        <div
+                            class="verification-code-preview"
+                            id="verificationPreview"
+                        ></div>
+
+
+                        <div
+                            class="form-message error-message"
+                            id="verificationMessage"
+                        ></div>
+
+
+                        <button
+                            type="submit"
+                            class="primary-button"
+                        >
+                            Verify Email
+                        </button>
+
+                    </form>
+
+
+                    <div class="resend-section">
+
+                        <span>
+                            Didn't receive the code?
+                        </span>
+
+                        <button
+                            type="button"
+                            class="text-button strong"
+                            id="resendCode"
+                        >
+                            Resend code
+                        </button>
+
+                        <span
+                            class="resend-timer"
+                            id="resendTimer"
+                        ></span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div
+        class="modal-overlay"
+        id="forgotModal"
+    >
+
+        <div class="modal">
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close="forgotModal"
+            >
+                ×
+            </button>
+
+            <span class="modal-label">
+                ACCOUNT RECOVERY
+            </span>
+
+            <h3>
+                Forgot your password?
+            </h3>
+
+            <p>
+                Enter your email address and we'll prepare
+                a password reset request.
+            </p>
+
+            <form
+                id="forgotForm"
+                novalidate
+            >
+
+                <div class="field">
+
+                    <label for="forgotEmail">
+                        Email address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="forgotEmail"
+                        placeholder="you@example.com"
+                    >
+
+                    <span
+                        class="field-error"
+                        id="forgotEmailError"
+                    ></span>
+
+                </div>
+
+                <div
+                    class="form-message"
+                    id="forgotMessage"
+                ></div>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                >
+                    Send Reset Request
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TERMS MODAL -->
+    <div
+        class="modal-overlay"
+        id="termsModal"
+    >
+
+        <div class="modal terms-modal">
+
+            <button
+                type="button"
+                class="modal-close"
+                data-close="termsModal"
+            >
+                ×
+            </button>
+
+            <span class="modal-label">
+                INFORMATION
+            </span>
+
+            <h3>
+                Terms & Conditions
+            </h3>
+
+            <div class="terms-content">
+
+                <p>
+                    Job posters are responsible for providing
+                    accurate information about their vacancies.
+                </p>
+
+                <p>
+                    Application links should direct applicants
+                    to the intended application method.
+                </p>
+
+                <p>
+                    This is currently a frontend demonstration.
+                    Account and verification data are temporarily
+                    stored in the browser.
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="primary-button"
+                data-close="termsModal"
+            >
+                Continue
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- TOAST -->
+    <div
+        class="toast"
+        id="toast"
+    >
+        <span id="toastMessage"></span>
+    </div>
+
+
+    <script src="api.js"></script>
+    <script src="poster-auth.js"></script>
+
+</body>
+
+</html>

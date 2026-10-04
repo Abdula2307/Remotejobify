@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>RemoteJobify — Post a Job</title>
+
+    <meta name="description" content="Post a job opportunity on RemoteJobify." />
+
+    <link rel="stylesheet" href="post-job.css" />
+  </head>
+
+  <body>
+    <!-- =========================
+         PAGE BACKGROUND
+    ========================== -->
+
+    <div class="page-background"></div>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <header class="navbar">
+      <a href="job-finder.html" class="logo"> Remote<span>Jobify</span> </a>
+
+      <div class="nav-right">
+        <span class="poster-label"> Post a Job </span>
+      </div>
+    </header>
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main-container">
+      <!-- =========================
+             PAGE INTRO
+        ========================== -->
+
+      <section class="post-hero">
+        <div class="hero-label">
+          <span class="hero-dot"></span>
+
+          Create an opportunity
+        </div>
+
+        <h1>
+          Post your
+          <span>job.</span>
+        </h1>
+
+        <p>
+          Share your opportunity with people who are looking for their next
+          career move.
+        </p>
+      </section>
+
+      <!-- =========================
+             JOB FORM
+        ========================== -->
+
+      <section class="post-job-section">
+        <form id="postJobForm" class="job-form" novalidate>
+          <!-- =========================
+                     BASIC INFORMATION
+                ========================== -->
+
+          <div class="form-card">
+            <div class="form-card-header">
+              <div>
+                <span class="section-number"> 01 </span>
+
+                <h2>Job information</h2>
+              </div>
+
+              <p>Tell applicants about the position.</p>
+            </div>
+
+            <!-- Job Title -->
+
+            <div class="form-group">
+              <label for="jobTitle">
+                Job Title
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="jobTitle"
+                name="jobTitle"
+                placeholder="e.g. Graphic Designer"
+                autocomplete="off"
+              />
+
+              <small class="field-error" id="jobTitleError"></small>
+            </div>
+
+            <!-- Company -->
+
+            <div class="form-group">
+              <label for="companyName">
+                Company Name
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="companyName"
+                name="companyName"
+                placeholder="e.g. Acme Studio"
+                autocomplete="organization"
+              />
+
+              <small class="field-error" id="companyNameError"></small>
+            </div>
+
+            <!-- Location -->
+
+            <div class="form-group">
+              <label for="jobLocation">
+                Location
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="jobLocation"
+                name="jobLocation"
+                placeholder="e.g. Lahore, Pakistan / Remote"
+                autocomplete="off"
+              />
+
+              <small class="field-error" id="jobLocationError"></small>
+            </div>
+
+            <!-- Vacancies -->
+
+            <div class="form-group">
+              <label for="vacancies">
+                Number of Vacancies
+                <span>*</span>
+              </label>
+
+              <input
+                type="number"
+                id="vacancies"
+                name="vacancies"
+                min="1"
+                step="1"
+                placeholder="e.g. 3"
+              />
+
+              <small class="field-error" id="vacanciesError"></small>
+            </div>
+
+            <div class="form-group">
+              <label for="jobCategory"> Job Category </label>
+
+              <select id="jobCategory" required>
+                <option value="" disabled selected>Select a category</option>
+
+                <option value="technology">Technology</option>
+
+                <option value="design">Design</option>
+
+                <option value="marketing">Marketing</option>
+
+                <option value="education">Education</option>
+              </select>
+            </div>
+            <!-- Description -->
+
+            <div class="form-group">
+              <label for="jobDescription">
+                Job Description
+                <span>*</span>
+              </label>
+
+              <textarea
+                id="jobDescription"
+                name="jobDescription"
+                rows="8"
+                placeholder="Describe the role, responsibilities, requirements and anything applicants should know..."
+              ></textarea>
+
+              <div class="textarea-footer">
+                <small class="field-error" id="jobDescriptionError"></small>
+
+                <span id="descriptionCount"> 0 characters </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- =========================
+                     APPLY INFORMATION
+                ========================== -->
+
+          <div class="form-card">
+            <div class="form-card-header">
+              <div>
+                <span class="section-number"> 02 </span>
+
+                <h2>Application method</h2>
+              </div>
+
+              <p>Choose how applicants can contact you.</p>
+            </div>
+
+            <!-- Apply Method -->
+
+            <div class="form-group">
+              <label>
+                Apply Through
+                <span>*</span>
+              </label>
+
+              <div class="apply-methods" id="applyMethods">
+                <!-- WhatsApp -->
+
+                <button
+                  type="button"
+                  class="apply-method active"
+                  data-method="whatsapp"
+                >
+                  <span class="method-title"> WhatsApp </span>
+
+                  <span class="method-description">
+                    Applicants contact you directly
+                  </span>
+                </button>
+
+                <!-- Website -->
+
+                <button
+                  type="button"
+                  class="apply-method"
+                  data-method="website"
+                >
+                  <span class="method-title"> Website </span>
+
+                  <span class="method-description">
+                    Send applicants to a website
+                  </span>
+                </button>
+
+                <!-- Email -->
+
+                <button type="button" class="apply-method" data-method="email">
+                  <span class="method-title"> Email </span>
+
+                  <span class="method-description">
+                    Applicants send you an email
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Apply URL / Contact -->
+
+            <div class="form-group">
+              <label for="applyValue" id="applyValueLabel">
+                WhatsApp Number
+                <span>*</span>
+              </label>
+
+              <input
+                type="text"
+                id="applyValue"
+                name="applyValue"
+                placeholder="e.g. +92 300 1234567"
+                autocomplete="off"
+              />
+
+              <small class="input-hint" id="applyValueHint">
+                Enter the WhatsApp number applicants should contact.
+              </small>
+
+              <small class="field-error" id="applyValueError"></small>
+            </div>
+          </div>
+
+          <!-- =========================
+                     PREVIEW
+                ========================== -->
+
+          <div class="form-card preview-card">
+            <div class="form-card-header">
+              <div>
+                <span class="section-number"> 03 </span>
+
+                <h2>Review your job</h2>
+              </div>
+
+              <p>Check your information before posting.</p>
+            </div>
+
+            <div class="job-preview" id="jobPreview">
+              <div class="preview-category">Job Opportunity</div>
+
+              <h3 id="previewTitle">Your job title</h3>
+
+              <div class="preview-company">
+                <span id="previewCompany"> Company name </span>
+              </div>
+
+              <div class="preview-meta">
+                <span id="previewLocation"> Location </span>
+
+                <span id="previewVacancies"> 0 Vacancies </span>
+              </div>
+
+              <div class="preview-divider"></div>
+
+              <p id="previewDescription">
+                Your job description will appear here.
+              </p>
+            </div>
+          </div>
+
+          <!-- =========================
+                     FORM ACTIONS
+                ========================== -->
+
+          <div class="form-actions">
+            <button type="button" class="cancel-button" id="cancelButton">
+              Cancel
+            </button>
+
+            <button type="submit" class="submit-button" id="submitJobButton">
+              Post Job
+              <span>→</span>
+            </button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <!-- =========================
+         SUCCESS MODAL
+    ========================== -->
+
+    <div class="modal-overlay" id="successModal">
+      <div class="success-modal" role="dialog" aria-modal="true">
+        <button
+          type="button"
+          class="modal-close"
+          id="successModalClose"
+          aria-label="Close"
+        >
+          ×
+        </button>
+
+        <div class="success-icon">
+          <span></span>
+        </div>
+
+        <h2>Job posted successfully</h2>
+
+        <p>Your job opportunity has been added and is now visible on RemoteJobify.</p>
+
+        <button type="button" class="modal-button" id="viewJobsButton">
+          View Jobs
+          <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- =========================
+         TOAST
+    ========================== -->
+
+    <div class="toast" id="toast">
+      <span class="toast-indicator"></span>
+
+      <span id="toastMessage"> Action completed. </span>
+    </div>
+
+    <script src="api.js"></script>
+    <script src="post-job.js"></script>
+  </body>
+</html>
