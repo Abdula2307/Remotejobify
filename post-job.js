@@ -13,12 +13,6 @@ const postJobForm =
 const jobTitle =
     document.getElementById("jobTitle");
 
-const companyName =
-    document.getElementById("companyName");
-
-const jobLocation =
-    document.getElementById("jobLocation");
-
 const vacancies =
     document.getElementById("vacancies");
 
@@ -42,12 +36,6 @@ const applyValueHint =
 
 const previewTitle =
     document.getElementById("previewTitle");
-
-const previewCompany =
-    document.getElementById("previewCompany");
-
-const previewLocation =
-    document.getElementById("previewLocation");
 
 const previewVacancies =
     document.getElementById("previewVacancies");
@@ -90,12 +78,6 @@ function updatePreview() {
     const title =
         jobTitle.value.trim();
 
-    const company =
-        companyName.value.trim();
-
-    const location =
-        jobLocation.value.trim();
-
     const vacancyNumber =
         vacancies.value.trim();
 
@@ -105,14 +87,6 @@ function updatePreview() {
 
     previewTitle.textContent =
         title || "Your job title";
-
-
-    previewCompany.textContent =
-        company || "Company name";
-
-
-    previewLocation.textContent =
-        location || "Location";
 
 
     if (vacancyNumber) {
@@ -142,18 +116,6 @@ function updatePreview() {
 ===================================================== */
 
 jobTitle.addEventListener(
-    "input",
-    updatePreview
-);
-
-
-companyName.addEventListener(
-    "input",
-    updatePreview
-);
-
-
-jobLocation.addEventListener(
     "input",
     updatePreview
 );
@@ -225,6 +187,23 @@ applyMethods.forEach(
    APPLY FIELD
 ===================================================== */
 
+/* Accepts "instagram.com/page" as well as "https://instagram.com/page" */
+function normalizeWebsite(text) {
+
+    const value =
+        String(text).trim();
+
+    if (value === "") {
+        return "";
+    }
+
+    return /^[a-z][a-z0-9+.-]*:\/\//i.test(value)
+        ? value
+        : "https://" + value;
+
+}
+
+
 function updateApplyField() {
 
     if (
@@ -256,13 +235,13 @@ function updateApplyField() {
             'Application Website URL <span>*</span>';
 
         applyValue.placeholder =
-            "https://example.com/apply";
+            "e.g. instagram.com/yourpage or yoursite.com/apply";
 
         applyValueHint.textContent =
-            "Enter the website URL where applicants can apply.";
+            "Any website or social page link works (Instagram, LinkedIn, Facebook, your own site).";
 
         applyValue.type =
-            "url";
+            "text";
 
     }
 
@@ -393,58 +372,6 @@ function validateForm() {
         clearFieldError(
             jobTitle,
             "jobTitleError"
-        );
-
-    }
-
-
-    /* ---------------------------------
-       COMPANY
-    --------------------------------- */
-
-    if (
-        companyName.value.trim() === ""
-    ) {
-
-        showFieldError(
-            companyName,
-            "companyNameError",
-            "Please enter the company name."
-        );
-
-        isValid = false;
-
-    } else {
-
-        clearFieldError(
-            companyName,
-            "companyNameError"
-        );
-
-    }
-
-
-    /* ---------------------------------
-       LOCATION
-    --------------------------------- */
-
-    if (
-        jobLocation.value.trim() === ""
-    ) {
-
-        showFieldError(
-            jobLocation,
-            "jobLocationError",
-            "Please enter the job location."
-        );
-
-        isValid = false;
-
-    } else {
-
-        clearFieldError(
-            jobLocation,
-            "jobLocationError"
         );
 
     }
@@ -587,11 +514,17 @@ function validateForm() {
         try {
 
             const url =
-                new URL(applyText);
+                new URL(
+                    normalizeWebsite(applyText)
+                );
 
             validURL =
-                url.protocol === "http:" ||
-                url.protocol === "https:";
+                (
+                    url.protocol === "http:" ||
+                    url.protocol === "https:"
+                ) &&
+                url.hostname.includes(".") &&
+                !/\s/.test(applyText);
 
         } catch (error) {
 
@@ -674,11 +607,6 @@ function createJobData() {
         title:
             jobTitle.value.trim(),
 
-        company:
-            companyName.value.trim(),
-
-        location:
-            jobLocation.value.trim(),
 
         vacancies:
             Number(
@@ -695,7 +623,9 @@ function createJobData() {
             selectedApplyMethod,
 
         applyValue:
-            applyValue.value.trim(),
+            selectedApplyMethod === "website"
+                ? normalizeWebsite(applyValue.value)
+                : applyValue.value.trim(),
 
         postedAt:
             new Date().toISOString()
