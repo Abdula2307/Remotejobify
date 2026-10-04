@@ -146,7 +146,10 @@ app.use("/api", async (req, res, next) => {
     next();
   } catch (err) {
     console.error("DB connection failed:", err.message);
-    res.status(503).json({ error: "Database unavailable. Try again shortly." });
+    res.status(503).json({
+      error: "Database unavailable. Try again shortly.",
+      reason: String(err.message).replace(/mongodb(\+srv)?:\/\/\S+/gi, "[hidden]").slice(0, 200),
+    });
   }
 });
 
