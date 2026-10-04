@@ -256,11 +256,12 @@ app.delete(
 app.use("/api", (req, res) => res.status(404).json({ error: "Not found." }));
 
 // Serve the front end from the same server (no CORS needed)
-app.use(express.static(path.join(__dirname, "..", "JB")));
+// Local use only (on Vercel the static files are served by Vercel itself)
+app.use(express.static(__dirname, { dotfiles: "deny" }));
 
 async function start(port) {
   await connectDB();
-  return app.listen(port, () => console.log(`RemoteJobify running on http://localhost:${port}`));
+  return app.listen(port, () => console.log(`RemotifyJobs running on http://localhost:${port}`));
 }
 
 module.exports = { app, start };
