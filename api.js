@@ -1,5 +1,5 @@
-/* Shared helper: talks to the RemoteJobify backend (same server as the pages). */
-window.RemoteJobifyAPI = (function () {
+/* Shared helper: talks to the RemotifyJobs backend (same server as the pages). */
+window.JoblyAPI = (function () {
     const TOKEN_KEY = "joblyToken";
     const USER_KEY = "joblyUser";
 
