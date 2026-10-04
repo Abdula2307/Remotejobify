@@ -13,6 +13,7 @@
     />
 
     <link rel="stylesheet" href="job-finder.css" />
+    <link rel="stylesheet" href="jobs-extra.css" />
   </head>
 
   <body>
@@ -161,6 +162,10 @@
           <button class="filter-button" data-category="education" type="button">
             Education
           </button>
+
+          <button class="filter-button" data-category="other" type="button">
+            Other
+          </button>
         </div>
       </section>
 
@@ -236,17 +241,11 @@
 
         <h2 id="modalJobTitle">Job Title</h2>
 
-        <div class="modal-company">
-          <span class="company-icon"></span>
-
-          <span id="modalCompany"> Company </span>
-        </div>
-
         <div class="modal-meta">
           <div class="meta-item">
             <span class="location-icon"></span>
 
-            <span id="modalLocation"> Location </span>
+            <span> Remote </span>
           </div>
 
           <div class="meta-item">
@@ -267,10 +266,16 @@
         <div class="modal-footer">
           <span class="apply-note" id="modalApplyNote"> Ready to apply? </span>
 
-          <button class="apply-button" id="modalApply" type="button">
-            Apply Now
-            <span>→</span>
-          </button>
+          <div class="modal-footer-buttons" id="modalButtons">
+            <button class="modal-delete" id="modalDelete" type="button" style="display: none">
+              Delete
+            </button>
+
+            <button class="apply-button" id="modalApply" type="button">
+              Apply Now
+              <span>→</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
