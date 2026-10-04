@@ -13,6 +13,7 @@ const CATEGORIES = {
   design: "Design",
   marketing: "Marketing",
   education: "Education",
+  other: "Other",
 };
 
 /* ---------- Models ---------- */
@@ -31,8 +32,6 @@ const User = mongoose.model(
 const jobSchema = new mongoose.Schema({
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
   title: { type: String, required: true, trim: true, maxlength: 120 },
-  company: { type: String, required: true, trim: true, maxlength: 120 },
-  location: { type: String, required: true, trim: true, maxlength: 120 },
   vacancies: { type: Number, required: true, min: 1, max: 1000 },
   category: { type: String, required: true, enum: Object.keys(CATEGORIES) },
   description: { type: String, required: true, trim: true, maxlength: 5000 },
@@ -63,13 +62,27 @@ function auth(req, res, next) {
   }
 }
 
-function toPublicJob(job) {
+// Reads the login token if there is one, but never blocks the request
+function optionalAuth(req, res, next) {
+  const header = req.headers.authorization || "";
+  const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+  req.userId = null;
+  if (token) {
+    try {
+      req.userId = jwt.verify(token, JWT_SECRET).id;
+    } catch {
+      req.userId = null;
+    }
+  }
+  next();
+}
+
+// Poster identity is never sent. Only a yes/no "mine" flag for the logged-in poster.
+function toPublicJob(job, userId) {
   const days = Math.floor((Date.now() - job.createdAt.getTime()) / 86400000);
   return {
     id: String(job._id),
     title: job.title,
-    company: job.company,
-    location: job.location,
     vacancies: job.vacancies,
     category: job.category,
     categoryName: CATEGORIES[job.category],
@@ -77,14 +90,20 @@ function toPublicJob(job) {
     postedDaysAgo: days,
     postedAt: job.createdAt,
     application: { type: job.applyMethod, url: job.applyValue },
+    mine: !!userId && String(job.owner) === String(userId),
   };
 }
 
 function cleanApply(method, value) {
   if (method === "website") {
+    const text = String(value).trim();
+    if (!text || /\s/.test(text)) return null;
+    // "instagram.com/page" works as well as "https://instagram.com/page"
+    const withScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(text) ? text : "https://" + text;
     try {
-      const u = new URL(value);
+      const u = new URL(withScheme);
       if (u.protocol !== "http:" && u.protocol !== "https:") return null;
+      if (!u.hostname.includes(".")) return null;
       return u.toString();
     } catch {
       return null;
@@ -195,21 +214,23 @@ app.post(
 
 app.get(
   "/api/jobs",
+  optionalAuth,
   wrap(async (req, res) => {
     const cutoff = new Date(Date.now() - JOB_LIFETIME_DAYS * 86400000); // hide instantly even if TTL sweep is late
     const jobs = await Job.find({ createdAt: { $gt: cutoff } }).sort({ createdAt: -1 }).limit(500);
-    res.json(jobs.map(toPublicJob));
+    res.json(jobs.map((j) => toPublicJob(j, req.userId)));
   })
 );
 
 app.get(
   "/api/jobs/:id",
+  optionalAuth,
   wrap(async (req, res) => {
     if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ error: "Job not found." });
     const cutoff = new Date(Date.now() - JOB_LIFETIME_DAYS * 86400000);
     const job = await Job.findOne({ _id: req.params.id, createdAt: { $gt: cutoff } });
     if (!job) return res.status(404).json({ error: "Job not found." });
-    res.json(toPublicJob(job));
+    res.json(toPublicJob(job, req.userId));
   })
 );
 
@@ -230,15 +251,13 @@ app.post(
       const job = await Job.create({
         owner: req.userId,
         title: b.title,
-        company: b.company,
-        location: b.location,
         vacancies: Number(b.vacancies),
         category: b.category,
         description: b.description,
         applyMethod: b.applyMethod,
         applyValue: apply,
       });
-      res.status(201).json(toPublicJob(job));
+      res.status(201).json(toPublicJob(job, req.userId));
     } catch (err) {
       if (err.name === "ValidationError") return res.status(400).json({ error: "Please check all fields and try again." });
       throw err;
