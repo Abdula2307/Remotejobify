@@ -40,7 +40,9 @@ function getCategoryName(category) {
             "Marketing",
 
         education:
-            "Education"
+            "Education",
+        other:
+            "Other"
 
     };
 
@@ -101,7 +103,9 @@ function getCategoryName(category) {
             "Marketing",
 
         education:
-            "Education"
+            "Education",
+        other:
+            "Other"
 
     };
 
@@ -152,11 +156,8 @@ const modalClose =
 const modalJobTitle =
     document.getElementById("modalJobTitle");
 
-const modalCompany =
-    document.getElementById("modalCompany");
-
-const modalLocation =
-    document.getElementById("modalLocation");
+const modalDelete =
+    document.getElementById("modalDelete");
 
 const modalVacancies =
     document.getElementById("modalVacancies");
@@ -249,41 +250,36 @@ function createJobCard(job, index) {
     card.style.animationDelay =
         `${index * 0.06}s`;
 
-    const isJobPoster =
-        JoblyAPI.isPoster();
+    const actionButtons = `
+        <div class="job-action-buttons">
 
-    let actionButtons = "";
-
-    if (isJobPoster) {
-
-        actionButtons = `
             <button
                 class="view-job-button"
                 type="button"
             >
                 View
             </button>
-        `;
 
-    } else {
+            <button
+                class="apply-job-button"
+                type="button"
+            >
+                Apply
+            </button>
 
-        actionButtons = `
-            <div class="job-action-buttons">
+            ${
+                job.mine
+                    ? `<button
+                            class="delete-job-button"
+                            type="button"
+                        >
+                            Delete
+                        </button>`
+                    : ""
+            }
 
-                <button
-                    class="view-job-button"
-                    type="button"
-                >
-                    View
-                </button>
-
-                
-
-            </div>
-        `;
-
-    }
-
+        </div>
+    `;
 
     card.innerHTML = `
 
@@ -299,10 +295,6 @@ function createJobCard(job, index) {
                     ${escapeHTML(job.title)}
                 </h3>
 
-                <p class="company-name">
-                    ${escapeHTML(job.company)}
-                </p>
-
                 <p class="job-description">
                     ${escapeHTML(job.description)}
                 </p>
@@ -313,7 +305,7 @@ function createJobCard(job, index) {
 
                         <span class="location-small-icon"></span>
 
-                        ${escapeHTML(job.location)}
+                        Remote
 
                     </span>
 
@@ -398,6 +390,31 @@ function createJobCard(job, index) {
 
 
     /* =========================
+       DELETE BUTTON (owner only)
+    ========================= */
+
+    const deleteButton =
+        card.querySelector(
+            ".delete-job-button"
+        );
+
+    if (deleteButton) {
+
+        deleteButton.addEventListener(
+            "click",
+            function (event) {
+
+                event.stopPropagation();
+
+                deleteJob(job);
+
+            }
+        );
+
+    }
+
+
+    /* =========================
        CARD CLICK
     ========================= */
 
@@ -472,8 +489,6 @@ function filterJobs() {
                 const searchableText =
                     `
                     ${job.title}
-                    ${job.company}
-                    ${job.location}
                     ${job.description}
                     ${job.categoryName}
                     `.toLowerCase();
@@ -714,12 +729,6 @@ function openJobModal(job) {
         job.title;
 
 
-    modalCompany.textContent =
-        job.company;
-
-
-    modalLocation.textContent =
-        job.location;
 
 
     modalVacancies.textContent =
@@ -756,36 +765,31 @@ function openJobModal(job) {
 ========================================================= */
 function updateApplyButton(job) {
 
-    if (JoblyAPI.isPoster()) {
-
-        modalApply.style.display =
-            "none";
-
-        const note =
-            document.getElementById(
-                "modalApplyNote"
-            );
-
-        if (note) {
-
-            note.textContent =
-                "Job details";
-
-        }
-
-        return;
-
-    }
-
     modalApply.style.display =
         "inline-flex";
-
 
     modalApply.innerHTML =
         `
             Apply Now
             <span>→</span>
         `;
+
+    const note =
+        document.getElementById(
+            "modalApplyNote"
+        );
+
+    if (note) {
+        note.textContent =
+            "Ready to apply?";
+    }
+
+    if (modalDelete) {
+        modalDelete.style.display =
+            job.mine
+                ? "inline-flex"
+                : "none";
+    }
 
 }
 
@@ -873,6 +877,75 @@ modalApply.addEventListener(
 
     }
 );
+
+
+/* =========================================================
+   DELETE JOB (only the poster can do this; server checks too)
+========================================================= */
+
+async function deleteJob(job) {
+
+    const confirmed =
+        window.confirm(
+            "Delete this job? This cannot be undone."
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        await JoblyAPI.request(
+            "/jobs/" +
+            encodeURIComponent(job.id),
+            { method: "DELETE" }
+        );
+
+        const position =
+            jobs.findIndex(
+                function (item) {
+                    return item.id === job.id;
+                }
+            );
+
+        if (position !== -1) {
+            jobs.splice(position, 1);
+        }
+
+        closeJobModal();
+
+        filterJobs();
+
+        showToast(
+            "Job deleted."
+        );
+
+    } catch (error) {
+
+        showToast(
+            error.message
+        );
+
+    }
+
+}
+
+
+if (modalDelete) {
+
+    modalDelete.addEventListener(
+        "click",
+        function () {
+
+            if (currentJob) {
+                deleteJob(currentJob);
+            }
+
+        }
+    );
+
+}
 
 
 /* =========================================================
