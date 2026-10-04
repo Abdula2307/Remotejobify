@@ -1,60 +1,57 @@
-/* Ads (Adsterra). Only the banner that fits the screen is loaded. */
-(function () {
-    var topSlot = document.getElementById("adTop");
-    var bottomSlot = document.getElementById("adBottom");
+/* Shared helper: talks to the RemotifyJobs backend (same server as the pages). */
+window.JoblyAPI = (function () {
+    const TOKEN_KEY = "joblyToken";
+    const USER_KEY = "joblyUser";
 
-    function label(slot) {
-        var text = document.createElement("div");
-        text.textContent = "Advertisement";
-        text.style.cssText =
-            "font-size:11px;letter-spacing:.08em;text-transform:uppercase;" +
-            "color:#8b8e98;margin-bottom:6px;text-align:center;";
-        slot.appendChild(text);
+    function safeGet(key) {
+        try { return localStorage.getItem(key); } catch (e) { return null; }
     }
 
-    function addScript(parent, src, attrs) {
-        var s = document.createElement("script");
-        s.src = src;
-        Object.keys(attrs || {}).forEach(function (k) { s.setAttribute(k, attrs[k]); });
-        parent.appendChild(s);
+    function getToken() { return safeGet(TOKEN_KEY); }
+
+    function getUser() {
+        try { return JSON.parse(safeGet(USER_KEY)) || null; } catch (e) { return null; }
     }
 
-    /* Top banner: 728x90 on desktop, 320x50 on phones */
-    if (topSlot) {
-        var wide = window.innerWidth >= 768;
-        var key = wide ? "2f2839e4cc5e4b30a5959b280fe0c93f" : "b5257438303b978aa022cccc22c59a7a";
+    // A poster is simply someone with a valid login token.
+    function isPoster() { return !!getToken(); }
 
-        topSlot.style.cssText =
-            "display:flex;flex-direction:column;align-items:center;" +
-            "margin:16px auto;min-height:" + (wide ? 110 : 70) + "px;";
-        label(topSlot);
-
-        var box = document.createElement("div");
-        topSlot.appendChild(box);
-
-        window.atOptions = {
-            key: key,
-            format: "iframe",
-            height: wide ? 90 : 50,
-            width: wide ? 728 : 320,
-            params: {}
-        };
-        addScript(box, "https://www.highrevenueformat.com/" + key + "/invoke.js");
+    function setSession(token, user) {
+        localStorage.setItem(TOKEN_KEY, token);
+        localStorage.setItem(USER_KEY, JSON.stringify(user || {}));
     }
 
-    /* Bottom: native banner */
-    if (bottomSlot) {
-        bottomSlot.style.cssText = "margin:24px auto;max-width:1000px;";
-        label(bottomSlot);
-
-        var container = document.createElement("div");
-        container.id = "container-2ddcacc3923e4165cc3d26d51517034e";
-        bottomSlot.appendChild(container);
-
-        addScript(
-            bottomSlot,
-            "https://pl31651058.profitableratecpmnetwork.com/2ddcacc3923e4165cc3d26d51517034e/invoke.js",
-            { async: "async", "data-cfasync": "false" }
-        );
+    function logout() {
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
     }
+
+    async function request(path, options) {
+        options = options || {};
+        const headers = { "Content-Type": "application/json" };
+        const token = getToken();
+        if (token) headers.Authorization = "Bearer " + token;
+
+        let response;
+        try {
+            response = await fetch("/api" + path, {
+                method: options.method || "GET",
+                headers: headers,
+                body: options.body ? JSON.stringify(options.body) : undefined
+            });
+        } catch (e) {
+            throw new Error("Cannot reach the server. Check your connection.");
+        }
+
+        let data = null;
+        try { data = await response.json(); } catch (e) { /* no body */ }
+
+        if (response.status === 401 && token) logout(); // expired login
+        if (!response.ok) {
+            throw new Error((data && data.error) || "Something went wrong.");
+        }
+        return data;
+    }
+
+    return { getToken, getUser, isPoster, setSession, logout, request };
 })();
