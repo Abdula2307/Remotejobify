@@ -1,6 +1,5 @@
 {
   "framework": null,
-  "outputDirectory": "JB",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.js" }
   ]
