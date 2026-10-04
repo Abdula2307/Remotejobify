@@ -1,230 +1,496 @@
-<!doctype html>
-<html lang="en">
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-<head>
+const jobCategory =
+    document.getElementById(
+        "jobCategory"
+    );
 
-    <meta charset="UTF-8" />
+const jobTitle =
+    document.getElementById(
+        "jobTitle"
+    );
+
+const jobVacancies =
+    document.getElementById(
+        "jobVacancies"
+    );
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    />
+const jobDescription =
+    document.getElementById(
+        "jobDescription"
+    );
 
-    <title>RemotifyJobs — Apply for Job</title>
+const applicationText =
+    document.getElementById(
+        "applicationText"
+    );
 
-    <meta
-        name="description"
-        content="Review job information and apply on RemotifyJobs."
-    />
+const applicationNote =
+    document.getElementById(
+        "applicationNote"
+    );
 
-    <link
-        rel="stylesheet"
-        href="apply-job.css"
-    />
+const applyButton =
+    document.getElementById(
+        "applyButton"
+    );
 
-</head>
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
 
 
-<body>
+/* =========================================================
+   GET SELECTED JOB
+========================================================= */
 
-    <div class="page-background"></div>
+async function getSelectedJob() {
 
+    const selectedJobId =
+        sessionStorage.getItem(
+            "joblySelectedJobId"
+        );
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
+    if (!selectedJobId) {
+        return null;
+    }
 
-    <header class="navbar">
+    try {
+        return await JoblyAPI.request(
+            "/jobs/" +
+            encodeURIComponent(selectedJobId)
+        );
+    } catch (error) {
+        return null;
+    }
 
-        <a
-            href="job-finder.html"
-            class="logo"
-        >
-            Remotify<span>Jobs</span>
-        </a>
+}
 
 
-        <div class="nav-right">
+/* =========================================================
+   WHATSAPP NUMBER FORMAT
+========================================================= */
 
-            <span class="page-label">
-                Apply for Job
-            </span>
+function createWhatsAppURL(number, job) {
 
-        </div>
+    if (!number) {
 
-    </header>
+        return null;
 
+    }
 
-    <!-- =========================
-         MAIN
-    ========================== -->
 
-    <main class="main-container">
+    let cleanNumber =
+        String(number)
+            .trim()
+            .replace(
+                /[\s\-().]/g,
+                ""
+            );
 
-        <section class="apply-hero">
+    cleanNumber =
+        cleanNumber.replace(
+            /^\+/,
+            ""
+        );
 
-            <div class="hero-label">
+    if (
+        cleanNumber.startsWith("0")
+    ) {
 
-                <span class="hero-dot"></span>
+        cleanNumber =
+            "92" +
+            cleanNumber.substring(1);
 
-                Job application
+    }
 
-            </div>
+    if (
+        !/^\d{10,15}$/.test(
+            cleanNumber
+        )
+    ) {
 
+        return null;
 
-            <h1>
+    }
 
-                Apply for this
-                <span>opportunity.</span>
 
-            </h1>
+    const message =
+        `Hello, I am interested in the ${job.title} position on RemotifyJobs. I would like to apply for this job.`;
 
 
-            <p>
-                Review the job information below before contacting
-                the job poster.
-            </p>
+    return (
+        "https://wa.me/" +
+        cleanNumber +
+        "?text=" +
+        encodeURIComponent(
+            message
+        )
+    );
 
-        </section>
+}
 
 
-        <!-- =========================
-             JOB INFORMATION
-        ========================== -->
+/* =========================================================
+   WEBSITE URL
+========================================================= */
 
-        <section
-            class="application-card"
-            id="applicationCard"
-        >
+function openWebsite(url) {
 
-            <div class="job-category"
-                 id="jobCategory">
-                Job Opportunity
-            </div>
+    try {
 
+        const text =
+            String(url).trim();
 
-            <h2 id="jobTitle">
-                Job Title
-            </h2>
+        const validURL =
+            new URL(
+                /^[a-z][a-z0-9+.-]*:\/\//i.test(text)
+                    ? text
+                    : "https://" + text
+            );
 
 
-            <p
-                class="company"
-                id="jobCompany"
-            >
-                Company
-            </p>
+        if (
+            validURL.protocol !== "http:" &&
+            validURL.protocol !== "https:"
+        ) {
 
+            return false;
 
-            <div class="job-meta">
+        }
 
-                <div class="meta-item">
 
-                    <span class="location-icon"></span>
+        window.open(
+            validURL.href,
+            "_blank",
+            "noopener,noreferrer"
+        );
 
-                    <span id="jobLocation">
-                        Location
-                    </span>
 
-                </div>
+        return true;
 
+    } catch (error) {
 
-                <div class="meta-item">
+        return false;
 
-                    <span class="vacancy-icon"></span>
+    }
 
-                    <span id="jobVacancies">
-                        0 Vacancies
-                    </span>
+}
 
-                </div>
 
-            </div>
+/* =========================================================
+   LOAD JOB
+========================================================= */
 
+async function loadJob() {
 
-            <div class="divider"></div>
+    const job =
+        await getSelectedJob();
 
 
-            <!-- =========================
-                 DESCRIPTION
-            ========================== -->
+    if (!job) {
 
-            <div class="job-description-section">
+        jobTitle.textContent =
+            "Job not found";
 
-                <h3>
-                    About this position
-                </h3>
+        jobCategory.textContent = "";
 
-                <p id="jobDescription">
-                    Job description
-                </p>
+        applyButton.style.display =
+            "none";
 
-            </div>
+        applicationText.textContent =
+            "The selected job could not be found.";
 
+        applicationNote.textContent =
+            "";
 
-            <!-- =========================
-                 APPLICATION
-            ========================== -->
+        return;
 
-            <div class="application-section">
+    }
 
-                <h3>
-                    How to apply
-                </h3>
 
+    /* =========================
+       BASIC INFORMATION
+    ========================= */
 
-                <p id="applicationText">
-                    Contact the job poster directly.
-                </p>
+    jobCategory.textContent =
+        getCategoryName(
+            job.category
+        );
 
 
-                <button
-                    id="applyButton"
-                    class="apply-whatsapp-button"
-                    type="button"
-                >
+    jobTitle.textContent =
+        job.title ||
+        "Job Opportunity";
 
-                    Apply on WhatsApp
 
-                    <span>→</span>
+    const vacancies =
+        Number(
+            job.vacancies
+        ) || 1;
 
-                </button>
 
+    jobVacancies.textContent =
+        `${vacancies} ${
+            vacancies === 1
+                ? "Vacancy"
+                : "Vacancies"
+        }`;
 
-                <p
-                    class="application-note"
-                    id="applicationNote"
-                >
-                    You will be redirected to WhatsApp.
-                </p>
 
-            </div>
+    jobDescription.textContent =
+        job.description ||
+        "No job description available.";
 
-        </section>
 
+    /* =========================
+       APPLICATION
+    ========================= */
 
-        <!-- =========================
-             BACK
-        ========================== -->
+    const method =
+        job.applyMethod ||
+        (
+            job.application &&
+            job.application.type
+        ) ||
+        "whatsapp";
 
-        <div class="back-wrapper">
 
-            <button
-                type="button"
-                id="backButton"
-                class="back-button"
-            >
-                ← Back to Jobs
-            </button>
+    const value =
+        job.applyValue ||
+        (
+            job.application &&
+            job.application.url
+        ) ||
+        "";
 
-        </div>
 
-    </main>
+    /* =========================
+       WHATSAPP
+    ========================= */
 
+    if (
+        method === "whatsapp"
+    ) {
 
-    <script src="api.js"></script>
-    <script src="apply-job.js"></script>
+        applyButton.style.display =
+            "inline-flex";
 
-</body>
 
-</html>
+        applyButton.textContent =
+            "Apply on WhatsApp";
+
+
+        applicationText.textContent =
+            "Contact the job poster directly on WhatsApp to apply for this position.";
+
+
+        applicationNote.textContent =
+            "Clicking the button will open WhatsApp with a ready-to-send application message.";
+
+
+        applyButton.onclick =
+            function () {
+
+                const whatsappURL =
+                    createWhatsAppURL(
+                        value,
+                        job
+                    );
+
+
+                if (!whatsappURL) {
+
+                    alert(
+                        "The job poster's WhatsApp number is invalid or unavailable."
+                    );
+
+                    return;
+
+                }
+
+
+                window.open(
+                    whatsappURL,
+                    "_blank"
+                );
+
+            };
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       WEBSITE
+    ========================= */
+
+    if (
+        method === "website"
+    ) {
+
+        applyButton.style.display =
+            "inline-flex";
+
+
+        applyButton.textContent =
+            "Apply Now →";
+
+
+        applicationText.textContent =
+            "Continue to the application website provided by the job poster.";
+
+
+        applicationNote.textContent =
+            "You will be redirected to the application website.";
+
+
+        applyButton.onclick =
+            function () {
+
+                if (
+                    !openWebsite(value)
+                ) {
+
+                    alert(
+                        "The application website is invalid."
+                    );
+
+                }
+
+            };
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       EMAIL
+    ========================= */
+
+    if (
+        method === "email"
+    ) {
+
+        applyButton.style.display =
+            "inline-flex";
+
+
+        applyButton.textContent =
+            "Apply by Email →";
+
+
+        applicationText.textContent =
+            "Send your application directly to the job poster by email.";
+
+
+        applicationNote.textContent =
+            "Your email application will open in your default mail application.";
+
+
+        applyButton.onclick =
+            function () {
+
+                if (!value) {
+
+                    alert(
+                        "The application email is unavailable."
+                    );
+
+                    return;
+
+                }
+
+
+                window.location.href =
+                    "mailto:" +
+                    value +
+                    "?subject=" +
+                    encodeURIComponent(
+                        `Application for ${job.title}`
+                    );
+
+            };
+
+
+        return;
+
+    }
+
+
+    /* =========================
+       UNKNOWN METHOD
+    ========================= */
+
+    applyButton.style.display =
+        "none";
+
+
+    applicationText.textContent =
+        "Application information is not available.";
+
+    applicationNote.textContent =
+        "";
+
+}
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+function getCategoryName(category) {
+
+    const names = {
+
+        technology:
+            "Technology",
+
+        design:
+            "Design",
+
+        marketing:
+            "Marketing",
+
+        education:
+            "Education",
+        other:
+            "Other"
+    };
+
+
+    return (
+        names[category] ||
+        "Job Opportunity"
+    );
+
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+backButton.addEventListener(
+    "click",
+    function () {
+
+        window.location.href =
+            "job-finder.html";
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+loadJob();
