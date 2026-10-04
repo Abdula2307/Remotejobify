@@ -98,44 +98,6 @@
               <small class="field-error" id="jobTitleError"></small>
             </div>
 
-            <!-- Company -->
-
-            <div class="form-group">
-              <label for="companyName">
-                Company Name
-                <span>*</span>
-              </label>
-
-              <input
-                type="text"
-                id="companyName"
-                name="companyName"
-                placeholder="e.g. Acme Studio"
-                autocomplete="organization"
-              />
-
-              <small class="field-error" id="companyNameError"></small>
-            </div>
-
-            <!-- Location -->
-
-            <div class="form-group">
-              <label for="jobLocation">
-                Location
-                <span>*</span>
-              </label>
-
-              <input
-                type="text"
-                id="jobLocation"
-                name="jobLocation"
-                placeholder="e.g. Lahore, Pakistan / Remote"
-                autocomplete="off"
-              />
-
-              <small class="field-error" id="jobLocationError"></small>
-            </div>
-
             <!-- Vacancies -->
 
             <div class="form-group">
@@ -169,6 +131,8 @@
                 <option value="marketing">Marketing</option>
 
                 <option value="education">Education</option>
+
+                <option value="other">Other</option>
               </select>
             </div>
             <!-- Description -->
@@ -302,12 +266,8 @@
 
               <h3 id="previewTitle">Your job title</h3>
 
-              <div class="preview-company">
-                <span id="previewCompany"> Company name </span>
-              </div>
-
               <div class="preview-meta">
-                <span id="previewLocation"> Location </span>
+                <span> Remote </span>
 
                 <span id="previewVacancies"> 0 Vacancies </span>
               </div>
