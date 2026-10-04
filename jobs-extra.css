@@ -1,0 +1,90 @@
+/* Extra styles: Apply + Delete buttons on the jobs page */
+
+.job-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.apply-job-button,
+.delete-job-button {
+    min-width: 105px;
+    padding: 11px 15px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.25s ease,
+        transform 0.25s ease,
+        color 0.25s ease;
+}
+
+.apply-job-button {
+    border: none;
+    background: #5b5ff0;
+    color: #ffffff;
+}
+
+.apply-job-button:hover {
+    background: #484bd8;
+    transform: translateY(-2px);
+}
+
+.delete-job-button {
+    border: 1px solid #e5484d;
+    background: transparent;
+    color: #e5484d;
+}
+
+.delete-job-button:hover {
+    background: #e5484d;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.modal-footer-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-delete {
+    min-width: 100px;
+    padding: 13px 17px;
+    border: 1px solid #e5484d;
+    border-radius: 11px;
+    background: transparent;
+    color: #e5484d;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
+}
+
+.modal-delete:hover {
+    background: #e5484d;
+    color: #ffffff;
+}
+
+@media (max-width: 700px) {
+    .job-action-buttons {
+        width: 100%;
+    }
+
+    .apply-job-button,
+    .delete-job-button,
+    .job-action-buttons .view-job-button {
+        width: 100%;
+    }
+
+    .modal-footer-buttons {
+        width: 100%;
+    }
+
+    .modal-footer-buttons > * {
+        flex: 1;
+    }
+}
