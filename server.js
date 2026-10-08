@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
+const { normalizeLink, parseImage, checkAdmin } = require("./utils");
 
 const JOB_LIFETIME_DAYS = 30;
 const CATEGORIES = {
@@ -55,10 +56,25 @@ function auth(req, res, next) {
   const header = req.headers.authorization || "";
   const token = header.startsWith("Bearer ") ? header.slice(7) : null;
   try {
-    req.userId = jwt.verify(token, JWT_SECRET).id;
+    const payload = jwt.verify(token, JWT_SECRET);
+    if (!payload.id) throw new Error("not a poster token");
+    req.userId = payload.id;
     next();
   } catch {
     res.status(401).json({ error: "Please log in again." });
+  }
+}
+
+// Admin-only routes (internships and scholarships)
+function adminAuth(req, res, next) {
+  const header = req.headers.authorization || "";
+  const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    if (payload.role !== "admin") throw new Error("not admin");
+    next();
+  } catch {
+    res.status(401).json({ error: "Admin login required." });
   }
 }
 
@@ -69,7 +85,7 @@ function optionalAuth(req, res, next) {
   req.userId = null;
   if (token) {
     try {
-      req.userId = jwt.verify(token, JWT_SECRET).id;
+      req.userId = jwt.verify(token, JWT_SECRET).id || null;
     } catch {
       req.userId = null;
     }
@@ -157,7 +173,11 @@ app.use(
     },
   })
 );
-app.use(express.json({ limit: "20kb" }));
+const smallJson = express.json({ limit: "20kb" });
+const listingJson = express.json({ limit: "500kb" });
+app.use((req, res, next) =>
+  /^\/api\/(internships|scholarships)/.test(req.path) ? listingJson(req, res, next) : smallJson(req, res, next)
+);
 
 app.use("/api", async (req, res, next) => {
   try {
@@ -173,6 +193,7 @@ app.use("/api", async (req, res, next) => {
 });
 
 const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 20 });
+const adminLimiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 10 });
 const postLimiter = rateLimit({ windowMs: 60 * 60 * 1000, limit: 20 });
 
 app.post(
@@ -274,6 +295,150 @@ app.delete(
     res.status(r.deletedCount ? 200 : 404).json({ ok: !!r.deletedCount });
   })
 );
+
+/* ---------- Admin login (email + password come from environment variables only) ---------- */
+app.post(
+  "/api/admin/login",
+  adminLimiter,
+  wrap(async (req, res) => {
+    const { email, password } = req.body || {};
+    const result = checkAdmin(email, password);
+    if (result === "not_configured") return res.status(503).json({ error: "Admin login is not set up yet." });
+    if (result !== "ok") return res.status(401).json({ error: "Incorrect email or password." });
+    res.json({ token: jwt.sign({ role: "admin" }, JWT_SECRET, { expiresIn: "12h" }) });
+  })
+);
+
+/* ---------- Internships and Scholarships (only the admin can post or delete) ---------- */
+const LISTING_LIFETIME_DAYS = 30;
+const LISTINGS = {
+  internships: { modelName: "Internship", uriEnv: "MONGODB_URI_INTERNSHIPS" },
+  scholarships: { modelName: "Scholarship", uriEnv: "MONGODB_URI_SCHOLARSHIPS" },
+};
+
+const listingSchema = new mongoose.Schema({
+  title: { type: String, required: true, trim: true, maxlength: 150 },
+  description: { type: String, required: true, trim: true, maxlength: 3000 },
+  link: { type: String, required: true, trim: true, maxlength: 500 },
+  deadline: { type: String, trim: true, maxlength: 60, default: "" },
+  hasImage: { type: Boolean, default: false },
+  image: {
+    data: { type: Buffer, select: false },
+    contentType: { type: String, select: false },
+  },
+  // MongoDB deletes the document automatically 30 days after it was posted
+  createdAt: { type: Date, default: Date.now, expires: LISTING_LIFETIME_DAYS * 24 * 60 * 60 },
+});
+
+// Each kind can use its own database (MONGODB_URI_INTERNSHIPS / MONGODB_URI_SCHOLARSHIPS).
+// If that variable is not set, it falls back to the main database.
+const listingModels = {};
+function getListing(kind) {
+  if (!listingModels[kind]) {
+    const cfg = LISTINGS[kind];
+    const uri = process.env[cfg.uriEnv];
+    let promise;
+    if (uri) {
+      const conn = mongoose.createConnection(uri);
+      const Model = conn.model(cfg.modelName, listingSchema, kind);
+      promise = conn.asPromise().then(() => Model.init()).then(() => Model);
+    } else {
+      const Model = mongoose.models[cfg.modelName] || mongoose.model(cfg.modelName, listingSchema, kind);
+      promise = connectDB().then(() => Model.init()).then(() => Model);
+    }
+    listingModels[kind] = promise.catch((err) => {
+      delete listingModels[kind];
+      throw err;
+    });
+  }
+  return listingModels[kind];
+}
+
+function toPublicListing(kind, doc) {
+  return {
+    id: String(doc._id),
+    title: doc.title,
+    description: doc.description,
+    link: doc.link,
+    deadline: doc.deadline || "",
+    imageUrl: doc.hasImage ? `/api/${kind}/${doc._id}/image` : null,
+    postedDaysAgo: Math.floor((Date.now() - doc.createdAt.getTime()) / 86400000),
+  };
+}
+
+Object.keys(LISTINGS).forEach((kind) => {
+  const base = "/api/" + kind;
+
+  // Public: list
+  app.get(
+    base,
+    wrap(async (req, res) => {
+      const Model = await getListing(kind);
+      const cutoff = new Date(Date.now() - LISTING_LIFETIME_DAYS * 86400000);
+      const items = await Model.find({ createdAt: { $gt: cutoff } }).sort({ createdAt: -1 }).limit(200);
+      res.json(items.map((i) => toPublicListing(kind, i)));
+    })
+  );
+
+  // Public: the picture
+  app.get(
+    base + "/:id/image",
+    wrap(async (req, res) => {
+      if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).end();
+      const Model = await getListing(kind);
+      const doc = await Model.findById(req.params.id).select("+image.data +image.contentType hasImage");
+      if (!doc || !doc.hasImage || !doc.image || !doc.image.data) return res.status(404).end();
+      res.set("Content-Type", doc.image.contentType);
+      res.set("Cache-Control", "public, max-age=86400");
+      res.send(doc.image.data);
+    })
+  );
+
+  // Admin only: add
+  app.post(
+    base,
+    adminAuth,
+    wrap(async (req, res) => {
+      const b = req.body || {};
+      const link = normalizeLink(b.link);
+      if (!link) return res.status(400).json({ error: "Enter a valid link (for example official-site.com/apply)." });
+
+      let image = null;
+      if (b.image) {
+        image = parseImage(b.image);
+        if (!image) return res.status(400).json({ error: "The image must be a JPG, PNG or WebP under 300 KB." });
+      }
+
+      const Model = await getListing(kind);
+      try {
+        const doc = await Model.create({
+          title: b.title,
+          description: b.description,
+          link,
+          deadline: typeof b.deadline === "string" ? b.deadline : "",
+          hasImage: !!image,
+          image: image ? { data: image.buffer, contentType: image.contentType } : undefined,
+        });
+        res.status(201).json(toPublicListing(kind, doc));
+      } catch (err) {
+        if (err.name === "ValidationError") return res.status(400).json({ error: "Please fill in the title and description." });
+        throw err;
+      }
+    })
+  );
+
+  // Admin only: delete
+  app.delete(
+    base + "/:id",
+    adminAuth,
+    wrap(async (req, res) => {
+      if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ error: "Not found." });
+      const Model = await getListing(kind);
+      const r = await Model.deleteOne({ _id: req.params.id });
+      res.status(r.deletedCount ? 200 : 404).json({ ok: !!r.deletedCount });
+    })
+  );
+});
 
 app.use("/api", (req, res) => res.status(404).json({ error: "Not found." }));
 
