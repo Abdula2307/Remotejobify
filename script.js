@@ -193,3 +193,45 @@ document.addEventListener(
 
     }
 );
+
+
+// =========================
+// INTERNSHIPS + SCHOLARSHIPS CARDS
+// =========================
+(function () {
+
+    function go(id, page) {
+
+        var card =
+            document.getElementById(id);
+
+        if (!card) {
+            return;
+        }
+
+        card.addEventListener(
+            "click",
+            function () {
+                window.location.href = page;
+            }
+        );
+
+        card.addEventListener(
+            "keydown",
+            function (event) {
+                if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                ) {
+                    event.preventDefault();
+                    window.location.href = page;
+                }
+            }
+        );
+
+    }
+
+    go("internshipsCard", "internships.html");
+    go("scholarshipsCard", "scholarships.html");
+
+})();
