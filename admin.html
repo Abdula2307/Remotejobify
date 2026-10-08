@@ -1,1 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>RemotifyJobs — Admin</title>
+    <link rel="stylesheet" href="opportunities.css" />
+  </head>
+  <body class="op-body">
+    <div class="op-bg"></div>
 
+    <header class="op-nav">
+      <a href="index.html" class="op-logo">Remotify<span>Jobs</span></a>
+      <div class="op-nav-right">
+        <span class="op-label">Admin</span>
+        <button class="op-btn ghost hidden" id="logoutBtn" type="button">Log out</button>
+      </div>
+    </header>
+
+    <main class="ad-wrap">
+      <!-- LOGIN -->
+      <section class="ad-panel" id="loginPanel">
+        <h1>Admin login</h1>
+        <p class="ad-sub">Only the site owner can add internships and scholarships.</p>
+        <form id="loginForm" autocomplete="on">
+          <div class="ad-field">
+            <label for="aEmail">Email</label>
+            <input id="aEmail" type="email" autocomplete="username" required />
+          </div>
+          <div class="ad-field">
+            <label for="aPass">Password</label>
+            <input id="aPass" type="password" autocomplete="current-password" required />
+          </div>
+          <button class="op-btn primary" id="loginBtn" type="submit">Log in</button>
+          <div class="ad-msg" id="loginMsg"></div>
+        </form>
+      </section>
+
+      <!-- DASHBOARD -->
+      <div id="dash" class="hidden">
+        <section class="ad-panel">
+          <h2>Add a listing</h2>
+          <div class="ad-tabs">
+            <button class="ad-tab active" data-kind="internships" type="button">Internships</button>
+            <button class="ad-tab" data-kind="scholarships" type="button">Scholarships</button>
+          </div>
+          <form id="addForm">
+            <div class="ad-field">
+              <label for="fTitle">Title</label>
+              <input id="fTitle" type="text" maxlength="150" required />
+            </div>
+            <div class="ad-field">
+              <label for="fDesc">Description</label>
+              <textarea id="fDesc" maxlength="3000" required></textarea>
+            </div>
+            <div class="ad-field">
+              <label for="fLink">Link <small>(where people apply or learn more)</small></label>
+              <input id="fLink" type="text" maxlength="500" placeholder="example.com/apply" required />
+            </div>
+            <div class="ad-field">
+              <label for="fDeadline">Deadline <small>(optional)</small></label>
+              <input id="fDeadline" type="text" maxlength="60" placeholder="e.g. 30 Nov 2026" />
+            </div>
+            <div class="ad-field">
+              <label for="fImage">Image <small>(optional, JPG/PNG/WebP, resized automatically)</small></label>
+              <input id="fImage" type="file" accept="image/jpeg,image/png,image/webp" />
+              <img class="ad-preview" id="preview" alt="Preview" />
+            </div>
+            <button class="op-btn primary" id="addBtnSubmit" type="submit">Publish</button>
+            <div class="ad-msg" id="addMsg"></div>
+          </form>
+        </section>
+
+        <section class="ad-panel">
+          <div class="ad-top">
+            <h2 id="listTitle">Current internships</h2>
+          </div>
+          <p class="ad-sub">Listings disappear automatically after 30 days.</p>
+          <div class="ad-list" id="adList"></div>
+        </section>
+      </div>
+    </main>
+
+    <script src="api.js"></script>
+    <script src="admin.js"></script>
+  </body>
+</html>
