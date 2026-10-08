@@ -2,6 +2,7 @@
 window.JoblyAPI = (function () {
     const TOKEN_KEY = "joblyToken";
     const USER_KEY = "joblyUser";
+    const ADMIN_KEY = "joblyAdminToken";
 
     function safeGet(key) {
         try { return localStorage.getItem(key); } catch (e) { return null; }
@@ -26,10 +27,16 @@ window.JoblyAPI = (function () {
         localStorage.removeItem(USER_KEY);
     }
 
+    /* Admin (internships + scholarships). Only a hint for the UI; the server checks every request. */
+    function getAdminToken() { return safeGet(ADMIN_KEY); }
+    function isAdmin() { return !!getAdminToken(); }
+    function setAdminSession(token) { localStorage.setItem(ADMIN_KEY, token); }
+    function adminLogout() { localStorage.removeItem(ADMIN_KEY); }
+
     async function request(path, options) {
         options = options || {};
         const headers = { "Content-Type": "application/json" };
-        const token = getToken();
+        const token = options.admin ? getAdminToken() : getToken();
         if (token) headers.Authorization = "Bearer " + token;
 
         let response;
@@ -46,12 +53,18 @@ window.JoblyAPI = (function () {
         let data = null;
         try { data = await response.json(); } catch (e) { /* no body */ }
 
-        if (response.status === 401 && token) logout(); // expired login
+        if (response.status === 401 && token) {
+            if (options.admin) adminLogout(); else logout(); // expired login
+        }
         if (!response.ok) {
             throw new Error((data && data.error) || "Something went wrong.");
         }
         return data;
     }
 
-    return { getToken, getUser, isPoster, setSession, logout, request };
+    return {
+        getToken, getUser, isPoster, setSession, logout,
+        isAdmin, setAdminSession, adminLogout,
+        request
+    };
 })();
