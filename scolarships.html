@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RemotifyJobs — Scholarships</title>
+    <meta name="description" content="Scholarships and funding opportunities for students around the world." />
+    <link rel="stylesheet" href="opportunities.css" />
+  </head>
+  <body class="op-body" data-kind="scholarships">
+    <div class="op-bg"></div>
+
+    <header class="op-nav">
+      <a href="index.html" class="op-logo">Remotify<span>Jobs</span></a>
+      <div class="op-nav-right">
+        <span class="op-label">Scholarships</span>
+        <a class="op-btn primary" id="addBtn" href="admin.html?kind=scholarships" hidden>+ Add</a>
+        <a class="op-btn ghost" href="index.html">Home</a>
+      </div>
+    </header>
+
+    <main class="op-main">
+      <section class="op-hero">
+        <h1>Find your <span>scholarship</span></h1>
+        <p>Scholarships and funding opportunities for students around the world.</p>
+      </section>
+
+      <div id="adTop"></div>
+
+      <div class="op-tools">
+        <input class="op-search" id="opSearch" type="search" placeholder="Search scholarships…" aria-label="Search scholarships" />
+        <span class="op-count" id="opCount"></span>
+      </div>
+
+      <div class="op-grid" id="opGrid"></div>
+
+      <div class="op-empty" id="opEmpty">
+        <h3>Nothing here yet</h3>
+        <p>New scholarships are added regularly. Check back soon.</p>
+      </div>
+
+      <div id="adBottom"></div>
+    </main>
+
+    <div class="op-toast" id="opToast"></div>
+
+    <script src="api.js"></script>
+    <script src="listings.js"></script>
+    <script src="ads.js"></script>
+  </body>
+</html>
