@@ -22,7 +22,7 @@
       <!-- LOGIN -->
       <section class="ad-panel" id="loginPanel">
         <h1>Admin login</h1>
-        <p class="ad-sub">Only the site owner can add internships and scholarships.</p>
+        <p class="ad-sub">Only the site owner can add scholarships.</p>
         <form id="loginForm" autocomplete="on">
           <div class="ad-field">
             <label for="aEmail">Email</label>
@@ -41,10 +41,6 @@
       <div id="dash" class="hidden">
         <section class="ad-panel">
           <h2>Add a listing</h2>
-          <div class="ad-tabs">
-            <button class="ad-tab active" data-kind="internships" type="button">Internships</button>
-            <button class="ad-tab" data-kind="scholarships" type="button">Scholarships</button>
-          </div>
           <form id="addForm">
             <div class="ad-field">
               <label for="fTitle">Title</label>
@@ -74,7 +70,7 @@
 
         <section class="ad-panel">
           <div class="ad-top">
-            <h2 id="listTitle">Current internships</h2>
+            <h2 id="listTitle">Current scholarships</h2>
           </div>
           <p class="ad-sub">Listings disappear automatically after 30 days.</p>
           <div class="ad-list" id="adList"></div>
@@ -86,3 +82,4 @@
     <script src="admin.js"></script>
   </body>
 </html>
+
