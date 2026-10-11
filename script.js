@@ -231,7 +231,7 @@ document.addEventListener(
 
     }
 
-    go("internshipsCard", "internships.html");
     go("scholarshipsCard", "scholarships.html");
 
 })();
+ 
