@@ -1,6 +1,6 @@
 (function () {
     var api = window.JoblyAPI;
-    var kind = new URLSearchParams(location.search).get("kind") === "scholarships" ? "scholarships" : "internships";
+    var kind = "scholarships";
     var imageData = null;
 
     var $ = function (id) { return document.getElementById(id); };
@@ -146,3 +146,4 @@
 
     show();
 })();
+
