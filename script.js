@@ -231,7 +231,5 @@ document.addEventListener(
 
     }
 
-    go("scholarshipsCard", "scholarships.html");
 
 })();
- 
