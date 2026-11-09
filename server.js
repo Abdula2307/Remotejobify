@@ -6,7 +6,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
-const { normalizeLink, parseImage, checkAdmin } = require("./utils");
+const { normalizeLink, parseImage, checkAdmin, safeEqual } = require("./utils");
+const { collect } = require("./importer");
 
 const JOB_LIFETIME_DAYS = 30;
 const CATEGORIES = {
@@ -42,6 +43,20 @@ const jobSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now, expires: JOB_LIFETIME_DAYS * 24 * 60 * 60 },
 });
 const Job = mongoose.model("Job", jobSchema);
+
+// Jobs pulled automatically from open remote-job feeds. They disappear 3 days after the original posting date.
+const IMPORT_LIFETIME_DAYS = 3;
+const importedSchema = new mongoose.Schema({
+  source: { type: String, required: true },
+  externalId: { type: String, required: true },
+  title: { type: String, required: true, maxlength: 120 },
+  category: { type: String, required: true, enum: Object.keys(CATEGORIES) },
+  description: { type: String, required: true, maxlength: 5000 },
+  applyUrl: { type: String, required: true, maxlength: 500 },
+  createdAt: { type: Date, required: true, expires: IMPORT_LIFETIME_DAYS * 24 * 60 * 60 },
+});
+importedSchema.index({ source: 1, externalId: 1 }, { unique: true });
+const ImportedJob = mongoose.model("ImportedJob", importedSchema);
 
 /* ---------- Helpers ---------- */
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -110,6 +125,21 @@ function toPublicJob(job, userId) {
   };
 }
 
+function toPublicImported(job) {
+  return {
+    id: String(job._id),
+    title: job.title,
+    vacancies: 1,
+    category: job.category,
+    categoryName: CATEGORIES[job.category],
+    description: job.description,
+    postedDaysAgo: Math.floor((Date.now() - job.createdAt.getTime()) / 86400000),
+    postedAt: job.createdAt,
+    application: { type: "website", url: job.applyUrl },
+    mine: false,
+  };
+}
+
 function cleanApply(method, value) {
   if (method === "website") {
     const text = String(value).trim();
@@ -148,7 +178,7 @@ function connectDB() {
   if (!dbPromise) {
     dbPromise = mongoose
       .connect(process.env.MONGODB_URI)
-      .then(() => Promise.all([Job.init(), User.init()]))
+      .then(() => Promise.all([Job.init(), User.init(), ImportedJob.init()]))
       .catch((err) => {
         dbPromise = null;
         throw err;
@@ -238,8 +268,17 @@ app.get(
   optionalAuth,
   wrap(async (req, res) => {
     const cutoff = new Date(Date.now() - JOB_LIFETIME_DAYS * 86400000); // hide instantly even if TTL sweep is late
-    const jobs = await Job.find({ createdAt: { $gt: cutoff } }).sort({ createdAt: -1 }).limit(500);
-    res.json(jobs.map((j) => toPublicJob(j, req.userId)));
+    const importCutoff = new Date(Date.now() - IMPORT_LIFETIME_DAYS * 86400000);
+    const [jobs, imported] = await Promise.all([
+      Job.find({ createdAt: { $gt: cutoff } }).sort({ createdAt: -1 }).limit(500),
+      ImportedJob.find({ createdAt: { $gt: importCutoff } }).sort({ createdAt: -1 }).limit(500),
+    ]);
+    const all = [
+      ...jobs.map((j) => ({ at: j.createdAt.getTime(), pub: toPublicJob(j, req.userId) })),
+      ...imported.map((j) => ({ at: j.createdAt.getTime(), pub: toPublicImported(j) })),
+    ];
+    all.sort((a, b) => b.at - a.at);
+    res.json(all.slice(0, 500).map((x) => x.pub));
   })
 );
 
@@ -250,7 +289,12 @@ app.get(
     if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ error: "Job not found." });
     const cutoff = new Date(Date.now() - JOB_LIFETIME_DAYS * 86400000);
     const job = await Job.findOne({ _id: req.params.id, createdAt: { $gt: cutoff } });
-    if (!job) return res.status(404).json({ error: "Job not found." });
+    if (!job) {
+      const importCutoff = new Date(Date.now() - IMPORT_LIFETIME_DAYS * 86400000);
+      const imp = await ImportedJob.findOne({ _id: req.params.id, createdAt: { $gt: importCutoff } });
+      if (imp) return res.json(toPublicImported(imp));
+      return res.status(404).json({ error: "Job not found." });
+    }
     res.json(toPublicJob(job, req.userId));
   })
 );
@@ -293,6 +337,33 @@ app.delete(
     if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ error: "Not found." });
     const r = await Job.deleteOne({ _id: req.params.id, owner: req.userId });
     res.status(r.deletedCount ? 200 : 404).json({ ok: !!r.deletedCount });
+  })
+);
+
+/* ---------- Automatic job import (called by Vercel Cron; locked with CRON_SECRET) ---------- */
+app.get(
+  "/api/cron/import",
+  wrap(async (req, res) => {
+    const secret = process.env.CRON_SECRET || "";
+    const header = req.headers.authorization || "";
+    if (secret.length < 16 || !safeEqual(header, "Bearer " + secret))
+      return res.status(401).json({ error: "Unauthorized." });
+    const { jobs, report } = await collect();
+    let added = 0;
+    if (jobs.length) {
+      const r = await ImportedJob.bulkWrite(
+        jobs.map((j) => ({
+          updateOne: {
+            filter: { source: j.source, externalId: j.externalId },
+            update: { $setOnInsert: j },
+            upsert: true,
+          },
+        })),
+        { ordered: false }
+      );
+      added = r.upsertedCount || 0;
+    }
+    res.json({ ok: true, added, sources: report });
   })
 );
 
