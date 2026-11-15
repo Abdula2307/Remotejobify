@@ -58,6 +58,35 @@ const importedSchema = new mongoose.Schema({
 importedSchema.index({ source: 1, externalId: 1 }, { unique: true });
 const ImportedJob = mongoose.model("ImportedJob", importedSchema);
 
+/* ---------- Sitemap ---------- */
+const SITE_URL = (process.env.SITE_URL || "https://remotifyjobs.app").replace(/\/+$/, "");
+
+const xmlEscape = (v) =>
+  String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+
+function buildSitemap(base, pages, jobs) {
+  const urls = [];
+  pages.forEach((p) => urls.push({ loc: base + p.path, priority: p.priority, changefreq: p.changefreq }));
+  jobs.forEach((j) =>
+    urls.push({
+      loc: base + "/apply-job.html?id=" + encodeURIComponent(j.id),
+      lastmod: j.date instanceof Date && !isNaN(j.date) ? j.date.toISOString() : null,
+      priority: "0.6",
+      changefreq: "daily",
+    })
+  );
+  const body = urls
+    .slice(0, 50000) // sitemap limit
+    .map(
+      (u) =>
+        "  <url>\n    <loc>" + xmlEscape(u.loc) + "</loc>\n" +
+        (u.lastmod ? "    <lastmod>" + u.lastmod + "</lastmod>\n" : "") +
+        "    <changefreq>" + u.changefreq + "</changefreq>\n    <priority>" + u.priority + "</priority>\n  </url>"
+    )
+    .join("\n");
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + body + "\n</urlset>\n";
+}
+
 /* ---------- Helpers ---------- */
 const JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET || JWT_SECRET.length < 16) {
@@ -337,6 +366,32 @@ app.delete(
     if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ error: "Not found." });
     const r = await Job.deleteOne({ _id: req.params.id, owner: req.userId });
     res.status(r.deletedCount ? 200 : 404).json({ ok: !!r.deletedCount });
+  })
+);
+
+/* ---------- sitemap.xml (homepage + every live job; Vercel rewrites /sitemap.xml to this app) ---------- */
+app.get(
+  "/sitemap.xml",
+  wrap(async (req, res) => {
+    await connectDB();
+    const [mine, imported] = await Promise.all([
+      Job.find({ createdAt: { $gt: new Date(Date.now() - JOB_LIFETIME_DAYS * 86400000) } })
+        .select("_id createdAt").sort({ createdAt: -1 }).limit(5000).lean(),
+      ImportedJob.find({ createdAt: { $gt: new Date(Date.now() - IMPORT_LIFETIME_DAYS * 86400000) } })
+        .select("_id createdAt").sort({ createdAt: -1 }).limit(5000).lean(),
+    ]);
+    const jobs = [...mine, ...imported].map((j) => ({ id: String(j._id), date: j.createdAt }));
+    const xml = buildSitemap(
+      SITE_URL,
+      [
+        { path: "/", priority: "1.0", changefreq: "daily" },
+        { path: "/job-finder.html", priority: "0.9", changefreq: "hourly" },
+      ],
+      jobs
+    );
+    res.set("Content-Type", "application/xml; charset=utf-8");
+    res.set("Cache-Control", "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400");
+    res.send(xml);
   })
 );
 
