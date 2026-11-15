@@ -49,7 +49,14 @@ const backButton =
 
 async function getSelectedJob() {
 
+    /* A link like apply-job.html?id=123 (used by Google and shared links) wins over the saved selection */
+    const linkedJobId =
+        new URLSearchParams(
+            window.location.search
+        ).get("id");
+
     const selectedJobId =
+        linkedJobId ||
         sessionStorage.getItem(
             "joblySelectedJobId"
         );
@@ -225,6 +232,10 @@ async function loadJob() {
     jobTitle.textContent =
         job.title ||
         "Job Opportunity";
+
+    document.title =
+        (job.title || "Job Opportunity") +
+        " — Remote Job | RemotifyJobs";
 
 
     const vacancies =
