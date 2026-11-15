@@ -6,20 +6,16 @@
 
     <title>RemotifyJobs — Remote Jobs Updated Daily</title>
 
-    <meta
-        name="description"
-        content="Find your next job or post a vacancy and connect with the right talent."
-    >
-
+    <meta name="description" content="Find your next remote job or post a vacancy and connect with the right talent.">
     <link rel="canonical" href="https://remotifyjobs.app/">
     <meta name="theme-color" content="#5b5ff0">
 
-    <!-- Favicon (same abdullah.png file) -->
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/abdullah.png">
     <link rel="shortcut icon" href="/abdullah.png">
     <link rel="apple-touch-icon" href="/abdullah.png">
 
-    <!-- Open Graph (Facebook, WhatsApp, LinkedIn, Telegram) -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="RemotifyJobs">
     <meta property="og:title" content="RemotifyJobs — Remote Jobs Updated Daily">
@@ -45,170 +41,579 @@
 
 <body>
 
-    <div class="background"></div>
+    <div class="page-background" aria-hidden="true">
+        <span class="bg-orb orb-one"></span>
+        <span class="bg-orb orb-two"></span>
+        <span class="bg-orb orb-three"></span>
+    </div>
 
     <!-- Navbar -->
-    <nav class="navbar">
+    <header class="navbar">
+        <div class="nav-container">
+            <a class="brand" href="#home" aria-label="RemotifyJobs home">
+                <span class="brand-mark">RJ</span>
+                <span class="brand-text">
+                    <span class="brand-name">Remotify<span>Jobs</span></span>
+                    <span class="brand-tagline">Simple. Fast. Professional.</span>
+                </span>
+            </a>
 
-        <a href="#" class="logo">
-            Remotify<span>Jobs</span>
-        </a>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a class="nav-link active" href="#home">Home</a>
+                <a class="nav-link" href="#how-it-works">How It Works</a>
+                <a class="nav-link" href="#categories">Categories</a>
+                <a class="nav-link" href="#why-us">Why Us</a>
+                <a class="nav-link" href="#faq">FAQs</a>
+            </nav>
 
-        <div class="nav-tag">
-            Simple. Fast. Professional.
+            <a class="nav-button" href="job-finder.html">Get Started <span>→</span></a>
         </div>
+    </header>
 
-    </nav>
-
-
-    <!-- Main -->
     <main>
 
-        <!-- Hero Section -->
-        <section class="hero">
+        <!-- Hero -->
+        <section class="section hero" id="home">
+            <div class="hero-content">
+                <span class="eyebrow"><span class="status-dot"></span>YOUR NEXT CHAPTER STARTS HERE</span>
+                <h1>Find work. <span class="gradient-text">Build your future.</span></h1>
+                <p class="hero-description">Your skills deserve the right opportunity. Explore remote career possibilities, discover new roles, and take the next step toward your professional goals with RemotifyJobs.</p>
 
-            <div class="small-label">
-                <span class="status-dot"></span>
-                Your next opportunity starts here
+                <div class="hero-actions">
+                    <a class="primary-button" href="job-finder.html">Find a Job <span>→</span></a>
+                    <a class="secondary-button" href="poster-auth.html">Hire Talent</a>
+                </div>
+
+                <div class="hero-trust">
+                    <div class="trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M8.5 12l2.5 2.5L15.5 10"/></svg></div>
+                    <div>
+                        <strong>Built for your next move</strong>
+                        <span>Explore opportunities at your own pace.</span>
+                    </div>
+                </div>
             </div>
 
-            <h1>
-                Find work.<br>
-                <span>Build your future.</span>
-            </h1>
+            <div class="hero-visual">
+                <div class="visual-glow"></div>
 
-            <p class="hero-description">
-                Whether you're searching for your next opportunity
-                or looking for the right person to join your team,
-                start here.
-            </p>
+                <div class="visual-card">
+                    <div class="visual-card-header">
+                        <div>
+                            <span class="small-label">YOUR CAREER SPACE</span>
+                            <h3>Make your next move.</h3>
+                        </div>
+                        <div class="visual-header-icon">RJ</div>
+                    </div>
 
+                    <div class="visual-search">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+                        <span>Explore your possibilities</span>
+                        <span class="search-arrow">→</span>
+                    </div>
+
+                    <div class="visual-feature-list">
+                        <div class="visual-feature">
+                            <span class="feature-icon purple-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></span>
+                            <div><strong>Remote Opportunities</strong><span>Explore work from anywhere roles</span></div>
+                            <span class="feature-arrow">→</span>
+                        </div>
+                        <div class="visual-feature">
+                            <span class="feature-icon blue-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span>
+                            <div><strong>Career Growth</strong><span>Take the next step toward your goals</span></div>
+                            <span class="feature-arrow">→</span>
+                        </div>
+                        <div class="visual-feature">
+                            <span class="feature-icon green-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg></span>
+                            <div><strong>New Possibilities</strong><span>Discover roles that fit your skills</span></div>
+                            <span class="feature-arrow">→</span>
+                        </div>
+                    </div>
+
+                    <div class="visual-card-footer">
+                        <span class="footer-dot"></span>
+                        <span>Your next step may be just one click away.</span>
+                    </div>
+                </div>
+
+                <div class="floating-note note-top">
+                    <span class="note-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg></span>
+                    <div><strong>Think bigger</strong><span>Work beyond boundaries</span></div>
+                </div>
+                <div class="floating-note note-bottom">
+                    <span class="note-icon note-icon-light"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+                    <div><strong>Your next step</strong><span>Start exploring today</span></div>
+                </div>
+            </div>
         </section>
 
-
-        <!-- Options -->
-        <section class="options">
-
-            <!-- Job Finder -->
-            <div class="option-card" id="jobFinder">
-
-                <div class="card-glow"></div>
-
-                <div class="icon finder-icon">
-                    <span class="search-circle"></span>
-                    <span class="search-handle"></span>
+        <!-- Benefit strip -->
+        <section class="section">
+            <div class="benefit-strip">
+                <div class="benefit-item">
+                    <div class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></div>
+                    <div><strong>100% remote</strong><span>Work from wherever you are.</span></div>
                 </div>
-
-                <h2>Job Finder</h2>
-
-                <p>
-                    Looking for your next job? Explore available
-                    opportunities and find a position that's right
-                    for you.
-                </p>
-
-                <div class="card-bottom">
-
-                    <span class="choose-text">
-                        Find opportunities
-                    </span>
-
-                    <span class="arrow">
-                        →
-                    </span>
-
+                <div class="benefit-divider"></div>
+                <div class="benefit-item">
+                    <div class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+                    <div><strong>Updated daily</strong><span>Fresh jobs added automatically.</span></div>
                 </div>
-
+                <div class="benefit-divider"></div>
+                <div class="benefit-item">
+                    <div class="benefit-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M8.5 12l2.5 2.5L15.5 10"/></svg></div>
+                    <div><strong>Free to use</strong><span>No sign-up needed to find jobs.</span></div>
+                </div>
             </div>
-
-
-            <!-- Job Poster -->
-            <div class="option-card" id="jobPoster">
-
-                <div class="card-glow"></div>
-
-                <div class="icon poster-icon">
-                    <span class="briefcase-top"></span>
-                    <span class="briefcase-body"></span>
-                    <span class="briefcase-line"></span>
-                </div>
-
-                <h2>Job Poster</h2>
-
-                <p>
-                    Hiring someone? Post your vacancy and connect
-                    with people who are looking for their next
-                    opportunity.
-                </p>
-
-                <div class="card-bottom">
-
-                    <span class="choose-text">
-                        Post a vacancy
-                    </span>
-
-                    <span class="arrow">
-                        →
-                    </span>
-
-                </div>
-
-            </div>
-
         </section>
 
-        <div id="adTop"></div>
+        <!-- Choose your path -->
+        <section class="section choose-section" id="choose">
+            <div class="section-heading centered-heading">
+                <span class="eyebrow">CHOOSE YOUR PATH</span>
+                <h2>How would you like to <span class="gradient-text">get started?</span></h2>
+                <p>Whether you are looking for work or looking for talent, RemotifyJobs makes the next step simple.</p>
+            </div>
 
+            <div class="choice-grid">
+                <article class="option-card">
+                    <div class="card-topline">
+                        <span class="card-label">JOB FINDER</span>
+                        <div class="card-icon search-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+                    </div>
+                    <h3>I'm looking for a remote job</h3>
+                    <p>Browse remote jobs, read the details and apply directly. No account required.</p>
+                    <ul class="card-check-list">
+                        <li><span>✓</span>Browse jobs without signing up</li>
+                        <li><span>✓</span>Search and filter by category</li>
+                        <li><span>✓</span>Apply by link, WhatsApp or email</li>
+                    </ul>
+                    <a class="card-link" href="job-finder.html">Find a job <span>→</span></a>
+                    <span class="card-decoration decoration-one"></span>
+                </article>
 
-        <p class="bottom-text">
-            Choose how you want to get started.
-        </p>
+                <article class="option-card">
+                    <div class="card-topline">
+                        <span class="card-label">JOB POSTER</span>
+                        <div class="card-icon briefcase-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg></div>
+                    </div>
+                    <h3>I want to hire remote talent</h3>
+                    <p>Create a free account, post your vacancy and let candidates reach you directly.</p>
+                    <ul class="card-check-list">
+                        <li><span>✓</span>Free account, quick setup</li>
+                        <li><span>✓</span>Your personal details stay private</li>
+                        <li><span>✓</span>Delete your own posts any time</li>
+                    </ul>
+                    <a class="card-link" href="poster-auth.html">Post a job <span>→</span></a>
+                    <span class="card-decoration decoration-two"></span>
+                </article>
+            </div>
+
+            <div id="adTop"></div>
+        </section>
+
+        <!-- About -->
+        <section class="section about-section" id="about">
+            <div class="about-visual">
+                <span class="about-accent about-accent-one"></span>
+                <span class="about-accent about-accent-two"></span>
+
+                <div class="about-main-card">
+                    <div class="about-card-top">
+                        <div class="about-mini-logo">RJ</div>
+                        <div>
+                            <span class="small-label">ABOUT REMOTIFYJOBS</span>
+                            <h3>A simpler way to find remote work.</h3>
+                        </div>
+                    </div>
+
+                    <div class="about-line"></div>
+
+                    <div class="about-step">
+                        <span class="about-step-number">01</span>
+                        <div><strong>Explore</strong><p>Browse remote jobs across many categories.</p></div>
+                    </div>
+                    <div class="about-step">
+                        <span class="about-step-number">02</span>
+                        <div><strong>Connect</strong><p>Open a job and read everything you need to know.</p></div>
+                    </div>
+                    <div class="about-step">
+                        <span class="about-step-number">03</span>
+                        <div><strong>Apply</strong><p>Reach the employer directly using the method they chose.</p></div>
+                    </div>
+
+                    <div class="about-bottom">
+                        <span class="about-bottom-mark">RJ</span>
+                        <span>Remote jobs, kept simple.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-content">
+                <span class="eyebrow">ABOUT US</span>
+                <h2>Remote work, <span class="gradient-text">made easy to find.</span></h2>
+                <p>RemotifyJobs is built around one idea: finding a remote job should be simple. We bring remote opportunities together in one clean place, so job seekers can browse freely and employers can reach the right people.</p>
+                <p>Jobs are posted by employers or collected from open remote job boards, always with a link back to the original listing.</p>
+                <a class="text-link" href="job-finder.html">Explore jobs <span>→</span></a>
+            </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="section how-section" id="how-it-works">
+            <div class="section-heading centered-heading">
+                <span class="eyebrow">HOW IT WORKS</span>
+                <h2>Three simple steps to <span class="gradient-text">your next job</span></h2>
+                <p>No complicated process. Browse, choose and apply.</p>
+            </div>
+            <div class="steps-grid">
+            <article class="step-card">
+                <span class="step-number">01</span>
+                <div class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></div>
+                <h3>Browse remote jobs</h3>
+                <p>Open the job page and explore fresh remote jobs. No account is needed to look around.</p>
+                <span class="step-bottom">STEP 01</span>
+            </article>
+            <article class="step-card">
+                <span class="step-number">02</span>
+                <div class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg></div>
+                <h3>Find the right fit</h3>
+                <p>Search and filter by category, then open a job to read the full details.</p>
+                <span class="step-bottom">STEP 02</span>
+            </article>
+            <article class="step-card">
+                <span class="step-number">03</span>
+                <div class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+                <h3>Apply directly</h3>
+                <p>Apply through the link, WhatsApp or email the job gives. You talk straight to the employer.</p>
+                <span class="step-bottom">STEP 03</span>
+            </article>
+            </div>
+        </section>
+
+        <!-- Why choose us -->
+        <section class="section why-section" id="why-us">
+            <div class="why-layout">
+                <div class="why-intro">
+                    <span class="eyebrow">WHY REMOTIFYJOBS</span>
+                    <h2>Built for people who <span class="gradient-text">work remotely</span></h2>
+                    <p>We keep things focused, honest and easy, so you can spend your time on what matters: finding the right role.</p>
+                    <a class="primary-button" href="job-finder.html">Browse jobs <span>→</span></a>
+                </div>
+                <div class="why-features">
+                <article class="why-feature">
+                    <div class="why-feature-icon purple-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/></svg></div>
+                    <div>
+                        <h3>100% remote focus</h3>
+                        <p>Every listing is a remote opportunity, so you never have to filter out office jobs.</p>
+                    </div>
+                </article>
+                <article class="why-feature">
+                    <div class="why-feature-icon blue-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+                    <div>
+                        <h3>Always fresh</h3>
+                        <p>New remote jobs are added automatically, and old ones disappear so the list stays current.</p>
+                    </div>
+                </article>
+                <article class="why-feature">
+                    <div class="why-feature-icon green-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.2 8-8 9-4.8-1-8-4.5-8-9V6l8-3z"/><path d="M8.5 12l2.5 2.5L15.5 10"/></svg></div>
+                    <div>
+                        <h3>Free and simple</h3>
+                        <p>Finding jobs is free with no sign-up. Employers only need a quick free account to post.</p>
+                    </div>
+                </article>
+                <article class="why-feature">
+                    <div class="why-feature-icon orange-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div>
+                    <div>
+                        <h3>Direct applications</h3>
+                        <p>Apply on the employer's own link, WhatsApp or email. No middleman, no hidden steps.</p>
+                    </div>
+                </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="section categories-section" id="categories">
+            <div class="section-heading centered-heading">
+                <span class="eyebrow">JOB CATEGORIES</span>
+                <h2>Explore remote jobs by <span class="gradient-text">category</span></h2>
+                <p>From tech to teaching, find remote roles in the field that suits you.</p>
+            </div>
+            <div class="category-grid">
+            <article class="category-card">
+                <div class="category-icon category-purple"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M14 5l-4 14"/></svg></div>
+                <h3>Technology</h3>
+                <p>Software, web, data, IT and engineering roles you can do from anywhere.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            <article class="category-card">
+                <div class="category-icon category-blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 2-2 0-1.5-1-1.5-1-3s1-2 2.5-2H18a3 3 0 0 0 3-3c0-4.4-4-8-9-8z"/><circle cx="8" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16" cy="10" r="1"/></svg></div>
+                <h3>Design</h3>
+                <p>UI/UX, graphic, product and creative roles for remote design talent.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            <article class="category-card">
+                <div class="category-icon category-green"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l7 4V6L7 10H4z"/><path d="M18 9c1.3 1.3 1.3 4.7 0 6"/></svg></div>
+                <h3>Marketing</h3>
+                <p>SEO, social media, growth and content marketing opportunities.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            <article class="category-card">
+                <div class="category-icon category-orange"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z"/><path d="M4 19a2 2 0 0 1 2-2h13"/></svg></div>
+                <h3>Education</h3>
+                <p>Teaching, tutoring and training jobs you can deliver online.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            <article class="category-card">
+                <div class="category-icon category-pink"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1-4L16 5l3 3L8 19l-4 1z"/></svg></div>
+                <h3>Writing & Content</h3>
+                <p>Copywriting, editing and content creation from home.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            <article class="category-card">
+                <div class="category-icon category-teal"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg></div>
+                <h3>Customer Support</h3>
+                <p>Remote support and customer success roles.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            <article class="category-card">
+                <div class="category-icon category-yellow"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+                <h3>Sales & Business</h3>
+                <p>Business development, sales and operations positions.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            <article class="category-card">
+                <div class="category-icon category-indigo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></div>
+                <h3>Other Roles</h3>
+                <p>Many more remote opportunities that don't fit one box.</p>
+                <a class="category-link" href="job-finder.html">Browse jobs <span>→</span></a>
+            </article>
+            </div>
+            <p class="category-note">New remote jobs are added every day. Open the job page to see what is available now.</p>
+        </section>
+
+        <!-- Job seekers -->
+        <section class="section audience-section" id="job-seekers">
+            <div class="audience-card">
+                <div class="audience-content">
+                    <span class="eyebrow">FOR JOB SEEKERS</span>
+                    <h2>Find your next <span class="gradient-text">remote role</span></h2>
+                    <p>Looking for work you can do from anywhere? Browse current remote jobs and apply in minutes.</p>
+                    <ul class="audience-list">
+                        <li><span>✓</span>No account needed to browse and apply</li>
+                        <li><span>✓</span>Clear job details before you apply</li>
+                        <li><span>✓</span>Apply straight to the employer</li>
+                    </ul>
+                    <a class="primary-button" href="job-finder.html">Find a Job <span>→</span></a>
+                </div>
+                <div class="audience-side">
+                    <div class="audience-side-card">
+                        <span class="side-card-label">REMOTIFYJOBS</span>
+                        <div class="big-rj">R<span>J</span></div>
+                        <h3>Your next step starts here.</h3>
+                        <p>Fresh remote jobs, one clean place to find them.</p>
+                        <div class="side-card-line"></div>
+                        <div class="side-card-footer"><span class="footer-dot"></span>UPDATED DAILY</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Employers -->
+        <section class="section employer-section" id="employers">
+            <div class="audience-card employer-audience">
+                <div class="employer-visual">
+                    <div class="employer-visual-inner">
+                        <div class="employer-visual-header">
+                            <div class="employer-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M3 13h18"/></svg></div>
+                            <span>REACH REMOTE TALENT<br>FROM ONE PLACE</span>
+                        </div>
+                        <div class="team-illustration" aria-hidden="true">
+                            <div class="team-person person-one"><span class="person-head"></span><span class="person-body"></span></div>
+                            <div class="team-person person-two"><span class="person-head"></span><span class="person-body"></span></div>
+                            <div class="team-person person-three"><span class="person-head"></span><span class="person-body"></span></div>
+                        </div>
+                        <div class="employer-message">
+                            <span class="message-check">✓</span>
+                            <div><strong>Your job is live</strong><p>Candidates can apply right away.</p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="audience-content">
+                    <span class="eyebrow">FOR EMPLOYERS</span>
+                    <h2>Hire <span class="gradient-text">remote talent</span></h2>
+                    <p>Have a vacancy to fill? Post it on RemotifyJobs and let candidates reach you directly.</p>
+                    <ul class="audience-list">
+                        <li><span>✓</span>Free account and free posting</li>
+                        <li><span>✓</span>Candidates apply by link, WhatsApp or email</li>
+                        <li><span>✓</span>Your personal details stay private</li>
+                    </ul>
+                    <a class="secondary-button" href="poster-auth.html">Post a Job <span>→</span></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Employer guide -->
+        <section class="section employer-guide-section" id="post-guide">
+            <div class="section-heading centered-heading">
+                <span class="eyebrow">POSTING GUIDE</span>
+                <h2>Post a job in <span class="gradient-text">three steps</span></h2>
+                <p>Posting is quick. Here is how it works for employers.</p>
+            </div>
+            <div class="employer-guide-grid">
+            <article class="guide-card">
+                <span class="guide-number">01</span>
+                <h3>Create a free account</h3>
+                <p>Sign up in under a minute. Your personal details are never shown on your job posts.</p>
+            </article>
+            <article class="guide-card">
+                <span class="guide-number">02</span>
+                <h3>Write a clear post</h3>
+                <p>Add a title, the number of vacancies, a category and a full description of the role.</p>
+            </article>
+            <article class="guide-card">
+                <span class="guide-number">03</span>
+                <h3>Choose how to apply</h3>
+                <p>Send candidates to your website, your WhatsApp or your email. You stay in control.</p>
+            </article>
+            </div>
+            <div class="notice-panel">
+                <span class="notice-icon">i</span>
+                <p><strong>Good to know:</strong> jobs you post stay on RemotifyJobs for 30 days and are then removed automatically. You can delete your own posts at any time.</p>
+            </div>
+        </section>
+
+        <!-- Values -->
+        <section class="section values-section" id="values">
+            <div class="section-heading centered-heading">
+                <span class="eyebrow">OUR VALUES</span>
+                <h2>What we <span class="gradient-text">stand for</span></h2>
+                <p>A few simple ideas guide how we build RemotifyJobs.</p>
+            </div>
+            <div class="values-grid">
+            <article class="value-card">
+                <div class="value-symbol">RM</div>
+                <h3>Remote first</h3>
+                <p>We believe good work can happen anywhere, and we keep our focus on remote opportunities.</p>
+            </article>
+            <article class="value-card">
+                <div class="value-symbol">CL</div>
+                <h3>Clear and simple</h3>
+                <p>No clutter and no confusing steps. Find a job or post one in a few clicks.</p>
+            </article>
+            <article class="value-card">
+                <div class="value-symbol">OP</div>
+                <h3>Open and honest</h3>
+                <p>We show where jobs come from and link to the original, so you always know the source.</p>
+            </article>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section faq-section" id="faq">
+            <div class="faq-layout">
+                <div class="faq-intro">
+                    <span class="eyebrow">FAQS</span>
+                    <h2>Questions? <span class="gradient-text">We have answers.</span></h2>
+                    <p>Quick answers to the things people ask most about RemotifyJobs.</p>
+                    <div class="faq-help-card">
+                        <div class="faq-help-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></svg></div>
+                        <div>
+                            <strong>Still unsure?</strong>
+                            <p>Start by browsing the jobs. It is free and takes a few seconds.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-list">
+                <details class="faq-item">
+                    <summary>Do I need an account to find jobs?<span class="faq-toggle"></span></summary>
+                    <div class="faq-answer"><p>No. Anyone can browse and apply to jobs without signing up. An account is only needed if you want to post a job.</p></div>
+                </details>
+                <details class="faq-item">
+                    <summary>Are all the jobs remote?<span class="faq-toggle"></span></summary>
+                    <div class="faq-answer"><p>Yes. RemotifyJobs only lists remote opportunities, so you can work from wherever you are.</p></div>
+                </details>
+                <details class="faq-item">
+                    <summary>How long does a job stay on the site?<span class="faq-toggle"></span></summary>
+                    <div class="faq-answer"><p>Jobs posted by employers stay for 30 days. Jobs we collect automatically from open remote job boards stay for 3 days after they were first posted, so the list is always fresh.</p></div>
+                </details>
+                <details class="faq-item">
+                    <summary>Where do the jobs come from?<span class="faq-toggle"></span></summary>
+                    <div class="faq-answer"><p>Some are posted directly by employers on RemotifyJobs. Others come from open remote job boards. Those always show their source and link back to the original listing.</p></div>
+                </details>
+                <details class="faq-item">
+                    <summary>How do I post a job?<span class="faq-toggle"></span></summary>
+                    <div class="faq-answer"><p>Choose Hire Talent, create a free account, and fill in the job details. You decide how people apply: a website link, WhatsApp or email.</p></div>
+                </details>
+                <details class="faq-item">
+                    <summary>Does RemotifyJobs guarantee a job?<span class="faq-toggle"></span></summary>
+                    <div class="faq-answer"><p>No. We bring jobs and applicants together, but hiring decisions are made by employers. Always check a job carefully, and never pay money to get a job.</p></div>
+                </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="section final-cta-section">
+            <div class="final-cta">
+                <div class="cta-content">
+                    <span class="cta-eyebrow">READY TO START?</span>
+                    <h2>Your next remote job <span>is waiting.</span></h2>
+                    <p>Browse fresh remote opportunities today, or post a vacancy and find the right person for your team.</p>
+                    <div class="cta-actions">
+                        <a class="cta-primary-button" href="job-finder.html">Find a Job <span>→</span></a>
+                        <a class="cta-secondary-button" href="poster-auth.html">Hire Talent</a>
+                    </div>
+                </div>
+                <div class="cta-brand-mark" aria-hidden="true">RJ</div>
+                <span class="cta-decoration cta-decoration-one"></span>
+                <span class="cta-decoration cta-decoration-two"></span>
+            </div>
+        </section>
 
     </main>
 
-
-    <!-- Temporary Modal -->
-    <div class="modal-overlay" id="modalOverlay">
-
-        <div class="modal">
-
-            <button
-                class="modal-close"
-                id="closeModal"
-                type="button"
-                aria-label="Close"
-            >
-                ×
-            </button>
-
-            <div class="modal-icon" id="modalIcon">
-
-                <span class="modal-search-icon"></span>
-
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-brand-column">
+                <a class="brand" href="#home">
+                    <span class="brand-mark">RJ</span>
+                    <span class="brand-text">
+                        <span class="brand-name">Remotify<span>Jobs</span></span>
+                        <span class="brand-tagline">Simple. Fast. Professional.</span>
+                    </span>
+                </a>
+                <p>Remote jobs, kept simple. Find your next role or reach the right talent.</p>
             </div>
 
-            <h3 id="modalTitle">
-                Job Finder
-            </h3>
+            <div class="footer-column">
+                <h3>Explore</h3>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#categories">Categories</a>
+                <a href="#why-us">Why Us</a>
+                <a href="#faq">FAQs</a>
+            </div>
 
-            <p id="modalText">
-                The jobs page will be connected here.
-            </p>
+            <div class="footer-column">
+                <h3>Get started</h3>
+                <a href="job-finder.html">Find a Job</a>
+                <a href="poster-auth.html">Hire Talent</a>
+                <a href="post-job.html">Post a Job</a>
+            </div>
 
-            <button
-                class="modal-button"
-                id="continueButton"
-                type="button"
-            >
-                Continue
-            </button>
-
+            <div class="footer-column footer-highlight">
+                <h3>Ready when you are</h3>
+                <p>Browse remote jobs for free. No sign-up needed.</p>
+                <a class="footer-cta-link" href="job-finder.html">Find a job <span>→</span></a>
+            </div>
         </div>
 
-    </div>
+        <div class="footer-bottom">
+            <p>© <span>RemotifyJobs</span>. All rights reserved.</p>
+            <a class="back-to-top" href="#home">Back to top ↑</a>
+        </div>
+    </footer>
 
-
-    <script src="script.js"></script>
     <script src="ads.js"></script>
 
 </body>
